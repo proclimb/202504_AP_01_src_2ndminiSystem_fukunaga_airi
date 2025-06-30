@@ -44,6 +44,7 @@ $addressData = [
     'building'     => $_POST['building'],
 ];
 
+
 // 3. トランザクション開始
 try {
     $pdo->beginTransaction();
@@ -88,6 +89,7 @@ try {
     echo "エラーが発生しました。詳細: " . htmlspecialchars($e->getMessage(), ENT_QUOTES);
     exit;
 }
+var_dump($addressData);
 
 // 4.html の描画
 ?>
