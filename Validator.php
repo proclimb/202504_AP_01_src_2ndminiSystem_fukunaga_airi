@@ -10,18 +10,24 @@ class Validator
         $this->error_message = [];
 
         // 名前
-        if (empty($data['name'])) {
-            $this->error_message['name'] = '名前が入力されていません';
-        } elseif (mb_strlen($data['name']) > 20) {
+        $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
+        if (empty($trimmed_name)) {
+            $this->error_message['name'] = '入力値の前後に空白（スペース）は含めないでください ';
+        } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name)) {
+            $this->error_message['name'] = '名前に使用できない文字が含まれています';
+        } elseif (preg_match('/[0-9!"#\$%&\'\(\)\*=\+\,\-\.\/\\:;<=>?@\[\]^_`\{|\}~]/u', $trimmed_name)) {
+            $this->error_message['name'] = '名前に使用できない文字が含まれています';
         }
 
         // ふりがな
-        if (empty($data['kana'])) {
-            $this->error_message['kana'] = 'ふりがなが入力されていません';
-        } elseif (preg_match('/[^ぁ-んー]/u', $data['kana'])) {
+        $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['kana'] ?? '');
+        if (empty($trimmed_kana)) {
+            $this->error_message['kana'] = '入力値の前後に空白（スペース）は含めないでください ';
+        } elseif (preg_match('/[^ぁ-んー]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
-        } elseif (mb_strlen($data['kana']) > 20) {
+        } elseif (mb_strlen($trimmed_kana) > 20) {
             $this->error_message['kana'] = 'ふりがなは20文字以内で入力してください';
         }
 
@@ -31,21 +37,26 @@ class Validator
             $this->error_message['birth_date'] = '生年月日が入力されていません';
         } elseif (!$this->isValidDate($data['birth_year'] ?? '', $data['birth_month'] ?? '', $data['birth_day'] ?? '')) {
             $this->error_message['birth_date'] = '生年月日が正しくありません';
+        } elseif (strtotime($data['birth_year'] . '-' . $data['birth_month'] . '-' . $data['birth_day']) > strtotime(date('Y-m-d'))) {
+            $this->error_message['birth_date'] = '生年月日が未来日になっています。正しい日付を入力してください ';
         }
 
         // 郵便番号
         if (empty($data['postal_code'])) {
             $this->error_message['postal_code'] = '郵便番号が入力されていません';
         } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $data['postal_code'] ?? '')) {
-            $this->error_message['postal_code'] = '郵便番号が正しくありません';
+            $this->error_message['postal_code'] = '郵便番号はXXX-XXXXの形式で入力してください';
         }
 
         // 住所
-        if (empty($data['prefecture']) || empty($data['city_town'])) {
-            $this->error_message['address'] = '住所(都道府県もしくは市区町村・番地)が入力されていません';
-        } elseif (mb_strlen($data['prefecture']) > 10) {
+        $trimmed_pref = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['prefecture'] ?? '');
+        $trimmed_city = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['city_town'] ?? '');
+        $trimmed_building = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['building'] ?? '');
+        if (empty($trimmed_pref) || empty($trimmed_city)) {
+            $this->error_message['address'] = '入力値の前後に空白（スペース）は含めないでください ';
+        } elseif (mb_strlen($trimmed_pref) > 10) {
             $this->error_message['address'] = '都道府県は10文字以内で入力してください';
-        } elseif (mb_strlen($data['city_town']) > 50 || mb_strlen($data['building']) > 50) {
+        } elseif (mb_strlen($trimmed_city) > 50 || mb_strlen($trimmed_building) > 50) {
             $this->error_message['address'] = '市区町村・番地もしくは建物名は50文字以内で入力してください';
         }
 
@@ -59,12 +70,36 @@ class Validator
         ) {
             $this->error_message['tel'] = '電話番号は12~13桁で正しく入力してください';
         }
-
         // メールアドレス
         if (empty($data['email'])) {
             $this->error_message['email'] = 'メールアドレスが入力されていません';
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
+        }
+
+        // 郵便番号と住所の整合性チェック
+        if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {
+            $csvFile = __DIR__ . '/../202504_AP_01_others_2ndminiSystem_fukunaga_airi/テストデータ/address1.csv';
+            $found = false;
+            $input_postal = preg_replace('/[^0-9]/', '', $data['postal_code']);
+            if (($handle = fopen($csvFile, 'r')) !== false) {
+                while (($row = fgetcsv($handle))) {
+                    $csv_postal = preg_replace('/[^0-9]/', '', $row[2]);
+                    // 都道府県・市区町村の全角・半角・空白を正規化
+                    $csv_pref = preg_replace('/\s/u', '', mb_convert_kana($row[6], 'ASKV'));
+                    $csv_city = preg_replace('/\s/u', '', mb_convert_kana($row[7], 'ASKV'));
+                    $input_pref = preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV'));
+                    $input_city = preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV'));
+                    if ($csv_postal === $input_postal && $csv_pref === $input_pref && $csv_city === $input_city) {
+                        $found = true;
+                        break;
+                    }
+                }
+                fclose($handle);
+            }
+            if (!$found) {
+                $this->error_message['address'] = '郵便番号と住所が一致しません';
+            }
         }
 
         return empty($this->error_message);
@@ -83,3 +118,9 @@ class Validator
         return checkdate((int)$month, (int)$day, (int)$year);
     }
 }
+//現在の進捗
+/*入力値の前後、空文字のみの入力をはじく
+名前の間の半角、全角スペースの許容
+住所と郵便番号が一致しているか
+名前に使用できない文字が含まれています英語、数字記号をはじく
+*/

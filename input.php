@@ -71,7 +71,10 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="postalcodesearch.js"></script>
+
+    <script src="contact.js"></script>
 </head>
+
 
 <body>
     <div>
@@ -247,7 +250,7 @@ session_destroy();
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['email']) ?></div>
-                    <?php endif ?>
+                    <?php endif  ?>
                 </div>
             </div>
             <button type="submit">確認画面へ</button>
