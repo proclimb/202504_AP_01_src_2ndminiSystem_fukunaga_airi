@@ -54,7 +54,7 @@ session_destroy();
         <form action="submit.php" method="post">
             <input type="hidden" name="name" value="<?php echo $_POST['name'] ?>">
             <input type="hidden" name="kana" value="<?php echo $_POST['kana'] ?>">
-            <input type="hidden" name="gender" value="<?php echo $_POST['gender'] ?>">
+            <input type="hidden" name="gender_flag" value="<?php echo $_POST['gender'] ?>">
             <input type="hidden" name="birth_year" value="<?php echo $_POST['birth_year'] ?>">
             <input type="hidden" name="birth_month" value="<?php echo $_POST['birth_month'] ?>">
             <input type="hidden" name="birth_day" value="<?php echo $_POST['birth_day'] ?>">

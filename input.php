@@ -31,6 +31,7 @@
  */
 
 //  1.DB接続情報、クラス定義の読み込み
+require_once 'Db.php';
 require_once 'Validator.php';
 
 // 1.セッションの開始
@@ -41,20 +42,25 @@ session_start();
 // *$_POSTの値があるときは初期化しない
 $error_message = [];
 $old = $_POST ?? [];
+if (!isset($old['gender'])) {
+    $old['gender'] = '1';
+}
 
 // 3.入力項目の入力チェック
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
-    $validator = new Validator();
-
+    $validator = new Validator($pdo);
     if ($validator->validate($_POST)) {
         $_SESSION['input_data'] = $_POST;
         header('Location:confirm.php');
         exit();
     } else {
         $error_message = $validator->getErrors();
+        $old = $_POST;
+        if (!isset($old['gender'])) {
+            $old['gender'] = '1';
+        }
     }
 }
-
 // 4.セッションを破棄する
 session_destroy();
 
@@ -70,9 +76,6 @@ session_destroy();
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
-    <script src="postalcodesearch.js"></script>
-
-    <script src="contact.js"></script>
 </head>
 
 
@@ -84,7 +87,7 @@ session_destroy();
         <h2>登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" name="form">
+        <form action="input.php" method="post" name="form" onsubmit="return validateForm();">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -114,27 +117,27 @@ session_destroy();
                 </div>
                 <div>
                     <label>性別<span>必須</span></label>
-                    <?php $gender = $old['gender_flag'] ?? '1'; ?>
+                    <?php $gender = $old['gender'] ?? '1'; ?>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='1'
-                            <?= ($old['gender_flag'] ?? '1') == '1'
+                            <?= ($old['gender'] ?? '1') == '1'
                                 ? 'checked' : '' ?>>男性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='2'
-                            <?= ($old['gender_flag'] ?? '') == '2'
+                            <?= ($old['gender'] ?? '1') == '2'
                                 ? 'checked' : '' ?>>女性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='3'
-                            <?= ($old['gender_flag'] ?? '') == '3'
+                            <?= ($old['gender'] ?? '1') == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
                 <div>
@@ -260,5 +263,8 @@ session_destroy();
         </form>
     </div>
 </body>
+
+<script src="postalcodesearch.js"></script>
+<script src="contact.js"></script>
 
 </html>

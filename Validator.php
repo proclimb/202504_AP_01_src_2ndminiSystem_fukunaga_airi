@@ -2,6 +2,12 @@
 
 class Validator
 {
+    private $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
     private $error_message = [];
 
     // 呼び出し元で使う
@@ -79,26 +85,20 @@ class Validator
 
         // 郵便番号と住所の整合性チェック
         if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {
-            $csvFile = __DIR__ . '/../202504_AP_01_others_2ndminiSystem_fukunaga_airi/テストデータ/address1.csv';
-            $found = false;
-            $input_postal = preg_replace('/[^0-9]/', '', $data['postal_code']);
-            if (($handle = fopen($csvFile, 'r')) !== false) {
-                while (($row = fgetcsv($handle))) {
-                    $csv_postal = preg_replace('/[^0-9]/', '', $row[2]);
-                    // 都道府県・市区町村の全角・半角・空白を正規化
-                    $csv_pref = preg_replace('/\s/u', '', mb_convert_kana($row[6], 'ASKV'));
-                    $csv_city = preg_replace('/\s/u', '', mb_convert_kana($row[7], 'ASKV'));
-                    $input_pref = preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV'));
-                    $input_city = preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV'));
-                    if ($csv_postal === $input_postal && $csv_pref === $input_pref && $csv_city === $input_city) {
-                        $found = true;
-                        break;
-                    }
+            try {
+                $sql = "SELECT COUNT(*) FROM address_master WHERE postal_code = :postal_code AND prefecture = :prefecture AND city = :city_town";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    ':postal_code' => preg_replace('/[^0-9]/', '', $data['postal_code']),
+                    ':prefecture' => preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV')),
+                    ':city_town' => preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV')),
+                ]);
+                $count = $stmt->fetchColumn();
+                if ($count == 0) {
+                    $this->error_message['address'] = '郵便番号と住所が一致しません';
                 }
-                fclose($handle);
-            }
-            if (!$found) {
-                $this->error_message['address'] = '郵便番号と住所が一致しません';
+            } catch (\PDOException $e) {
+                $this->error_message['address'] = 'DBエラー: ' . $e->getMessage();
             }
         }
 

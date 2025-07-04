@@ -23,6 +23,7 @@ require_once 'User.php';
 require_once 'Address.php';
 require_once 'FileBlobHelper.php';
 
+
 // 2. 入力データ取得
 // 2-1. ユーザーデータ取得
 $id = $_POST['id'];
@@ -89,7 +90,7 @@ try {
     echo "エラーが発生しました。詳細: " . htmlspecialchars($e->getMessage(), ENT_QUOTES);
     exit;
 }
-var_dump($addressData);
+
 
 // 4.html の描画
 ?>

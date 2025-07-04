@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 /**
  * 登録完了画面
@@ -62,7 +64,7 @@ $address->create([
     'prefecture' => $_POST['prefecture'],
     'city_town' => $_POST['city_town'],
     'building' => $_POST['building']
-])
+]);
 
 // 4.html の描画
 ?>
