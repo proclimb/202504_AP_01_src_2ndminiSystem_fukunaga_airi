@@ -22,7 +22,7 @@ $sql = "
     FROM
         address_master
     WHERE
-        postal_code = :postal_code
+        REPLACE(postal_code, '-', '') = :postal_code
     LIMIT 1";
 
 $stmt = $pdo->prepare($sql);

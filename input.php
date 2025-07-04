@@ -197,8 +197,8 @@ session_destroy();
                             type="text"
                             name="postal_code"
                             id="postal_code"
-                            placeholder="例）100-0001"
-                            value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>">
+                            placeholder="例）100-0001 または 1000001"
+                            value="<?= isset($old['postal_code']) ? htmlspecialchars($old['postal_code']) : '' ?>">
                         <button type="button"
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>

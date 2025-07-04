@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('searchAddressBtn').addEventListener('click', function () {
-        const zip = document.getElementById('postal_code').value.replace(/-/g, '');
+        const zipRaw = document.getElementById('postal_code').value;
+        const zip = zipRaw.replace(/-/g, '');
 
         if (!zip) {
             alert('郵便番号を入力してください');
             return;
-        } else if (zip.match(/^[0-9]{3}-[0-9]{4}$/) == null) {
+        } else if (!zip.match(/^[0-9]{7}$/) && !zipRaw.match(/^[0-9]{3}-[0-9]{4}$/)) {
             alert('郵便番号が正しくありません');
             return;
         }
