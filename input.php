@@ -76,6 +76,7 @@ session_destroy();
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
+    <script src="contact.js"></script>
 </head>
 
 
@@ -87,7 +88,7 @@ session_destroy();
         <h2>登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" name="form" onsubmit="return validateForm();">
+        <form action="input.php" method="post" onsubmit="return validate();" name="edit">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>

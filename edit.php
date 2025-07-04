@@ -77,8 +77,8 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
         <h2>更新・削除画面</h2>
     </div>
     <div>
-        <form action="edit.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id']) ?>">
+        <form action="edit.php" method="post" enctype="multipart/form-data" onsubmit="return validate();" name="edit">
+            <input type="hidden" name="id" value=" <?php echo $_POST['id'] ?>">
             <h1 class="contact-title">更新内容入力</h1>
             <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>
             <p>削除する場合は「削除」ボタンをクリックしてください。</p>
