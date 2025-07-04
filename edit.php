@@ -26,9 +26,17 @@ require_once 'Validator.php';
 
 session_cache_limiter('none');
 session_start();
+// バリデーションのためにセッション値を毎回クリア
+unset($_SESSION['input_data']);
 
 
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
+    // 生年月日（YYYY-MM-DD）を分解してバリデーション用にセット
+    if (!empty($_POST['birth_date']) && preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $_POST['birth_date'], $m)) {
+        $_POST['birth_year'] = $m[1];
+        $_POST['birth_month'] = $m[2];
+        $_POST['birth_day'] = $m[3];
+    }
     $validator = new Validator($pdo);
     if ($validator->validate($_POST)) {
         $_SESSION['input_data'] = $_POST;
@@ -69,8 +77,8 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
         <h2>更新・削除画面</h2>
     </div>
     <div>
-        <form action="edit.php" method="post" name="form" onsubmit="return validateForm();">
-            <input type="hidden" name="id" value="<?= htmlspecialchars(isset($old['id']) ? $old['id'] : $_POST['id']) ?>">
+        <form action="edit.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id']) ?>">
             <h1 class="contact-title">更新内容入力</h1>
             <p>更新内容をご入力の上、「更新」ボタンをクリックしてください。</p>
             <p>削除する場合は「削除」ボタンをクリックしてください。</p>
@@ -94,7 +102,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         type="text"
                         name="kana"
                         placeholder="例）やまだたろう"
-                        value="<?= htmlspecialchars(isset($old['kana']) ? $old['kana'] : $_POST['kana']) ?>">
+                        value="<?= htmlspecialchars($_POST['kana']) ?>">
                     <?php if (isset($error_message['kana'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['kana']) ?></div>
@@ -228,7 +236,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     </div>
                 </div>
             </div>
-            <a href="update.php"><button type="submit">更新</button></a>
+            <button type="submit">更新</button>
 
 
             <a href="dashboard.php"><input type="button" value="ダッシュボードに戻る"></a>

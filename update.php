@@ -1,5 +1,9 @@
 <?php
 
+if (isset($_SESSION['input_data'])) {
+    $_POST = $_SESSION['input_data'];
+    unset($_SESSION['input_data']);
+}
 /**
  * 更新完了画面
  *
@@ -15,7 +19,7 @@
  * **   更新完了のメッセージを表示します
  */
 
-session_start();
+
 
 //  1.DB接続情報、クラス定義の読み込み
 require_once 'Db.php';
@@ -30,7 +34,7 @@ $id = $_POST['id'];
 $userData = [
     'name'         => $_POST['name'],
     'kana'         => $_POST['kana'],
-    'gender_flag'  => $_POST['gender_flag'],
+    'gender_flag'  => $_POST['gender'],
     'tel'          => $_POST['tel'],
     'email'        => $_POST['email'],
 ];

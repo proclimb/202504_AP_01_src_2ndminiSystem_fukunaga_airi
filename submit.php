@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
 
 /**
  * 登録完了画面
@@ -45,15 +44,25 @@ $birth_date = sprintf('%04d-%02d-%02d', $y, $m, $d);
 
 // 3-1.Userクラスをインスタンス化
 $user = new User($pdo);
-// 3-2.Userクラスのcreateメソッドを実行
-$userId = $user->create([
-    'name' => $_POST['name'],
-    'kana' => $_POST['kana'],
-    'gender_flag' => $_POST['gender'],
-    'birth_date' => $birth_date,
-    'tel' => $_POST['tel'],
-    'email' => $_POST['email']
-]);
+// 3-2.Userクラスのcreateメソッドを実行（重複時はエラー表示）
+try {
+    $userId = $user->create([
+        'name' => $_POST['name'],
+        'kana' => $_POST['kana'],
+        'gender_flag' => $_POST['gender'],
+        'birth_date' => $birth_date,
+        'tel' => $_POST['tel'],
+        'email' => $_POST['email']
+    ]);
+} catch (PDOException $e) {
+    if ($e->getCode() == 23000) {
+        echo '<p style="color:red;">このメールアドレスは既に登録されています。</p>';
+        echo '<a href="input.php">入力画面に戻る</a>';
+        exit;
+    } else {
+        throw $e;
+    }
+}
 
 // 4-1.UserAddressクラスをインスタンス化
 $address = new UserAddress($pdo);

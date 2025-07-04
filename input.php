@@ -130,14 +130,14 @@ session_destroy();
                             type="radio"
                             name="gender"
                             value='2'
-                            <?= ($old['gender'] ?? '1') == '2'
+                            <?= ($old['gender'] ?? '') == '2'
                                 ? 'checked' : '' ?>>女性</label>
                     <label class="gender">
                         <input
                             type="radio"
                             name="gender"
                             value='3'
-                            <?= ($old['gender'] ?? '1') == '3'
+                            <?= ($old['gender'] ?? '') == '3'
                                 ? 'checked' : '' ?>>その他</label>
                 </div>
                 <div>
