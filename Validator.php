@@ -18,7 +18,7 @@ class Validator
         // 名前
         $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
         if (empty($trimmed_name)) {
-            $this->error_message['name'] = 'お名前にスペースのみは使用できません ';
+            $this->error_message['name'] = 'スペースのみでは入力できません ';
         } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
         } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name)) {
@@ -30,7 +30,7 @@ class Validator
         // ふりがな
         $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['kana'] ?? '');
         if (empty($trimmed_kana)) {
-            $this->error_message['kana'] = '入力値の前後に空白（スペース）は含めないでください ';
+            $this->error_message['kana'] = 'スペースのみでは入力できません ';
         } elseif (preg_match('/[^ぁ-んー]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
         } elseif (mb_strlen($trimmed_kana) > 20) {
@@ -50,8 +50,8 @@ class Validator
         // 郵便番号
         if (empty($data['postal_code'])) {
             $this->error_message['postal_code'] = '郵便番号が入力されていません';
-        } elseif (!preg_match('/^[0-9]{3}-[0-9]{4}$/', $data['postal_code'] ?? '')) {
-            $this->error_message['postal_code'] = '郵便番号はXXX-XXXXの形式で入力してください';
+        } elseif (!preg_match('/^\d{3}-?\d{4}$/', $data['postal_code'] ?? '')) {
+            $this->error_message['postal_code'] = '郵便番号はXXX-XXXX または XXXXXXX の形式で入力してください';
         }
 
         // 住所
