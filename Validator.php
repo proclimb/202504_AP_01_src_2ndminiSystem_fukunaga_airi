@@ -18,7 +18,7 @@ class Validator
         // 名前
         $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
         if (empty($trimmed_name)) {
-            $this->error_message['name'] = '入力値の前後に空白（スペース）は含めないでください ';
+            $this->error_message['name'] = 'お名前にスペースは使用できません ';
         } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
         } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name)) {
