@@ -86,12 +86,12 @@ class Validator
         // 郵便番号と住所の整合性チェック
         if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {
             try {
-                $sql = "SELECT COUNT(*) FROM address_master WHERE postal_code = :postal_code AND prefecture = :prefecture AND city = :city_town";
+                $sql = "SELECT COUNT(*) FROM address_master WHERE REPLACE(postal_code, '-', '') = :postal_code AND prefecture = :prefecture AND city LIKE :city_town";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
                     ':postal_code' => preg_replace('/[^0-9]/', '', $data['postal_code']),
                     ':prefecture' => preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV')),
-                    ':city_town' => preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV')),
+                    ':city_town' => preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV')) . '%',
                 ]);
                 $count = $stmt->fetchColumn();
                 if ($count == 0) {

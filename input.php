@@ -38,6 +38,11 @@ require_once 'Validator.php';
 session_cache_limiter('none');
 session_start();
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // GETアクセス時はセッションをリセット（初期表示）
+    $_SESSION = [];
+    session_destroy();
+}
 // 2.変数の初期化
 // *$_POSTの値があるときは初期化しない
 $error_message = [];
@@ -62,7 +67,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     }
 }
 // 4.セッションを破棄する
-session_destroy();
+
 
 // 5.html の描画
 // ** これ以降は、htmlの部分になります
@@ -77,6 +82,7 @@ session_destroy();
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
     <script src="contact.js"></script>
+
 </head>
 
 

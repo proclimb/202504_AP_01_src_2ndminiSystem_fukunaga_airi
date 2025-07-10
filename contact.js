@@ -10,6 +10,9 @@ function validate() {
     removeElementsByClass("error");
     removeClass("error-form");
 
+    removeElementsByClass("error-msg");
+    removeElementsByClass("error-msg2");
+
     // 3.お名前の入力をチェック
     // 3-1.必須チェック
     if (document.edit.name.value == "") {
@@ -98,13 +101,11 @@ function validate() {
     }
 
     // 7.エラーチェック
-    if (flag) {
-        document.edit.submit();
+    if (!flag) {
+        return false;  // エラーあり => submit中止
     }
-
-    return false;
+    return true;       // エラーなし => submit許可
 }
-
 
 /**
  * エラーメッセージを表示する
@@ -156,14 +157,12 @@ var removeElementsByClass = function (className) {
  * @param {*} className
  */
 var removeClass = function (className) {
-
-    // 1.html内から className の要素を全て取得する
-    var elements = document.getElementsByClassName(className);
-    while (elements.length > 0) {
-        // 2.取得した要素からclassName を削除する
-        elements[0].className = "";
-    }
-}
+    // 配列に変換してから処理（ライブコレクション問題の回避）
+    var elements = Array.from(document.getElementsByClassName(className));
+    elements.forEach(function (el) {
+        el.classList.remove(className);
+    });
+};
 
 /**
  * メールアドレスの書式チェック
