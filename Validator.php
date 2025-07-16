@@ -18,7 +18,7 @@ class Validator
         // 名前
         $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
         if (empty($trimmed_name)) {
-            $this->error_message['name'] = 'お名前が空白のみで入力されています ';
+            $this->error_message['name'] = 'スペースのみでは入力できません ';
         } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
         } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name)) {
@@ -30,7 +30,7 @@ class Validator
         // ふりがな
         $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['kana'] ?? '');
         if (empty($trimmed_kana)) {
-            $this->error_message['kana'] = 'ふりがなが空白のみで入力されています ';
+            $this->error_message['kana'] = 'スペースのみでは入力できません ';
         } elseif (preg_match('/[^ぁ-んー]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
         } elseif (mb_strlen($trimmed_kana) > 20) {

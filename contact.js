@@ -15,7 +15,7 @@ function validateNameField() {
     if (value === "") {
         errorElement(document.edit.name, "お名前が入力されていません");
     } else if (value.trim() === "") {
-        errorElement(document.edit.name, "お名前が空白のみで入力されています");
+        errorElement(document.edit.name, "スペースのみでは入力できません");
     }
 }
 
