@@ -29,7 +29,7 @@ function validateKanaField() {
     if (value === "") {
         errorElement(document.edit.kana, "ふりがなが入力されていません");
     } else if (!validateKana(value)) {
-        errorElement(document.edit.kana, "ひらがなを入れて下さい");
+        errorElement(document.edit.kana, "ひらがなで入力してください");
     }
 }
 
@@ -43,7 +43,7 @@ function validateEmailField() {
     if (value === "") {
         errorElement(document.edit.email, "メールアドレスが入力されていません");
     } else if (!validateMail(value)) {
-        errorElement(document.edit.email, "メールアドレスが正しくありません");
+        errorElement(document.edit.email, "有効なメールアドレスを入力してください");
     }
 }
 
@@ -57,7 +57,7 @@ function validateTelField() {
     if (value === "") {
         errorElement(document.edit.tel, "電話番号が入力されていません");
     } else if (!validateTel(value)) {
-        errorElement(document.edit.tel, "電話番号が違います");
+        errorElement(document.edit.tel, "電話番号は12~13桁で正しく入力してください");
     }
 }
 

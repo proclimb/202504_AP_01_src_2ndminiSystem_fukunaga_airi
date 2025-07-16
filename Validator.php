@@ -18,7 +18,7 @@ class Validator
         // 名前
         $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
         if (empty($trimmed_name)) {
-            $this->error_message['name'] = 'スペースのみでは入力できません ';
+            $this->error_message['name'] = 'お名前が空白のみで入力されています ';
         } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
         } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name)) {
@@ -30,7 +30,7 @@ class Validator
         // ふりがな
         $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['kana'] ?? '');
         if (empty($trimmed_kana)) {
-            $this->error_message['kana'] = 'スペースのみでは入力できません ';
+            $this->error_message['kana'] = 'ふりがなが空白のみで入力されています ';
         } elseif (preg_match('/[^ぁ-んー]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
         } elseif (mb_strlen($trimmed_kana) > 20) {
@@ -59,7 +59,7 @@ class Validator
         $trimmed_city = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['city_town'] ?? '');
         $trimmed_building = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['building'] ?? '');
         if (empty($trimmed_pref) || empty($trimmed_city)) {
-            $this->error_message['address'] = '入力値の前後に空白（スペース）は含めないでください ';
+            $this->error_message['address'] = '住所(都道府県もしくは市区町村・番地)が入力されていません ';
         } elseif (mb_strlen($trimmed_pref) > 10) {
             $this->error_message['address'] = '都道府県は10文字以内で入力してください';
         } elseif (mb_strlen($trimmed_city) > 50 || mb_strlen($trimmed_building) > 50) {
