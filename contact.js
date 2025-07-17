@@ -128,5 +128,5 @@ var validateTel = function (val) {
 };
 
 var validateKana = function (val) {
-    return /^[ぁ-んー]+$/.test(val);
+    return /^[ぁ-んー\s　]+$/.test(val);
 };

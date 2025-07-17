@@ -48,17 +48,18 @@ class User
     public function update($id, $data)
     {
         $sql = "UPDATE
-                    user_base
-                SET name = :name,
-                    kana = :kana,
-                    gender_flag = :gender_flag,
-                    tel = :tel,
-                    email = :email,
-                    updated_at = now()
-                WHERE id = :id";
+                user_base
+            SET name = :name,
+                kana = :kana,
+                gender_flag = :gender_flag,
+                tel = :tel,
+                email = :email,
+                updated_at = now()
+            WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
+        // 実行結果を返すように変更（戻り値を返す）
+        return $stmt->execute([
             ':name'         => $data['name'],
             ':kana'         => $data['kana'],
             ':gender_flag'  => $data['gender_flag'],
