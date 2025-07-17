@@ -28,15 +28,20 @@ class Validator
         }
 
         // ふりがな
-        $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['kana'] ?? '');
-        if (empty($trimmed_kana)) {
-            $this->error_message['kana'] = 'スペースのみでは入力できません ';
+        $kana_input = $data['kana'] ?? '';
+        $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $kana_input);
+
+        if (mb_strlen(trim($kana_input)) > 0 && empty($trimmed_kana)) {
+            // スペースのみの入力
+            $this->error_message['kana'] = 'スペースのみでは入力できません';
+        } elseif (empty($trimmed_kana)) {
+            // 完全な未入力
+            $this->error_message['kana'] = 'ふりがなが入力されていません';
         } elseif (preg_match('/[^ぁ-んー]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
         } elseif (mb_strlen($trimmed_kana) > 20) {
             $this->error_message['kana'] = 'ふりがなは20文字以内で入力してください';
         }
-
 
         // 生年月日
         if (empty($data['birth_year']) || empty($data['birth_month']) || empty($data['birth_day'])) {
