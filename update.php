@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if (isset($_SESSION['input_data'])) {
     $_POST = $_SESSION['input_data'];
     unset($_SESSION['input_data']);
