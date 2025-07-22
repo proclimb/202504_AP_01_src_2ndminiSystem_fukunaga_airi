@@ -58,18 +58,24 @@ class Validator
         } elseif (!preg_match('/^\d{3}-?\d{4}$/', $data['postal_code'] ?? '')) {
             $this->error_message['postal_code'] = '郵便番号はXXX-XXXX または XXXXXXX の形式で入力してください';
         }
-
         // 住所
         $trimmed_pref = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['prefecture'] ?? '');
         $trimmed_city = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['city_town'] ?? '');
         $trimmed_building = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['building'] ?? '');
+
+        $address_valid = true;
+
         if (empty($trimmed_pref) || empty($trimmed_city)) {
             $this->error_message['address'] = '住所(都道府県もしくは市区町村・番地)が入力されていません ';
+            $address_valid = false;
         } elseif (mb_strlen($trimmed_pref) > 10) {
             $this->error_message['address'] = '都道府県は10文字以内で入力してください';
+            $address_valid = false;
         } elseif (mb_strlen($trimmed_city) > 50 || mb_strlen($trimmed_building) > 50) {
             $this->error_message['address'] = '市区町村・番地もしくは建物名は50文字以内で入力してください';
+            $address_valid = false;
         }
+
 
         // 電話番号
         if (empty($data['tel'])) {
@@ -89,7 +95,12 @@ class Validator
         }
 
         // 郵便番号と住所の整合性チェック
-        if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {
+        if (
+            $address_valid &&
+            !empty($data['postal_code']) &&
+            !empty($data['prefecture']) &&
+            !empty($data['city_town'])
+        ) {
             try {
                 $postal_code = preg_replace('/[^0-9]/', '', $data['postal_code']);
                 $prefecture = preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV'));
@@ -108,7 +119,7 @@ class Validator
                 $stmt->execute([
                     ':postal_code' => $postal_code,
                     ':prefecture' => $prefecture,
-                    ':city_town' => $city_town . '%', // 前方一致
+                    ':city_town' => $city_town . '%',
                 ]);
 
                 $count = $stmt->fetchColumn();
@@ -120,8 +131,6 @@ class Validator
                 $this->error_message['address'] = 'DBエラー: ' . $e->getMessage();
             }
         }
-
-        return empty($this->error_message);
     }
 
 
