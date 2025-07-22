@@ -131,6 +131,7 @@ class Validator
                 $this->error_message['address'] = 'DBエラー: ' . $e->getMessage();
             }
         }
+        return empty($this->error_message);
     }
 
 
