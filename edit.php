@@ -145,23 +145,28 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     </div>
                 </div>
                 <div>
-                    <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
-                        <input
-                            class="half-width"
-                            type="text"
-                            name="postal_code"
-                            id="postal_code"
-                            placeholder="例）100-0001"
-                            value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
-                        <button type="button"
-                            class="postal-code-search"
-                            id="searchAddressBtn">住所検索</button>
+                    <div>
+                        <label>郵便番号<span>必須</span></label>
+                        <div class="postal-row">
+                            <input
+                                class="half-width"
+                                type="text"
+                                name="postal_code"
+                                id="postal_code"
+                                placeholder="例）100-0001"
+                                value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
+                            <button type="button"
+                                class="postal-code-search"
+                                id="searchAddressBtn">住所検索</button>
+                        </div>
+
+                        <!-- エラー表示 -->
+                        <div class="postal-error-placeholder"></div>
+                        <?php if (isset($error_message['postal_code'])) : ?>
+                            <div class="error-msg2">
+                                <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                        <?php endif ?>
                     </div>
-                    <?php if (isset($error_message['postal_code'])) : ?>
-                        <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['postal_code']) ?></div>
-                    <?php endif ?>
                 </div>
                 <div>
                     <label>住所<span>必須</span></label>
@@ -221,6 +226,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     <span id="filename1" class="filename-display"></span>
                     <div class="preview-container">
                         <img id="preview1" src="#" alt="プレビュー画像１" style="display: none; max-width: 200px; margin-top: 8px;">
+                        <?php if (isset($error_message['document1'])) : ?>
+                            <div class="error-msg"><?= htmlspecialchars($error_message['document1']) ?></div>
+                        <?php endif ?>
                     </div>
                 </div>
                 <div>
@@ -233,6 +241,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     <span id="filename2" class="filename-display"></span>
                     <div class="preview-container">
                         <img id="preview2" src="#" alt="プレビュー画像２" style="display: none; max-width: 200px; margin-top: 8px;">
+                        <?php if (isset($error_message['document2'])) : ?>
+                            <div class="error-msg"><?= htmlspecialchars($error_message['document2']) ?></div>
+                        <?php endif ?>
                     </div>
                 </div>
             </div>

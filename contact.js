@@ -1,8 +1,26 @@
 window.addEventListener('load', function () {
+    // テキスト入力のバリデーション
     document.edit.name.addEventListener('input', validateNameField);
     document.edit.kana.addEventListener('input', validateKanaField);
     document.edit.email.addEventListener('input', validateEmailField);
     document.edit.tel.addEventListener('input', validateTelField);
+    document.edit.postal_code.addEventListener('input', validatePostalCodeField);
+
+    // ファイル形式チェック（表）
+    const front = document.getElementById('document1');
+    if (front) {
+        front.addEventListener('change', function () {
+            validateFileField(this, '本人確認書類（表）');
+        });
+    }
+
+    // ファイル形式チェック（裏）
+    const back = document.getElementById('document2');
+    if (back) {
+        back.addEventListener('change', function () {
+            validateFileField(this, '本人確認書類（裏）');
+        });
+    }
 });
 
 /**
@@ -62,10 +80,41 @@ function validateTelField() {
 }
 
 /**
+ * 郵便番号のリアルタイムバリデーション
+ */
+function validatePostalCodeField() {
+    clearFieldError(document.edit.postal_code);
+
+    const value = document.edit.postal_code.value;
+    if (value === "") {
+        errorElement(document.edit.postal_code, "郵便番号が入力されていません");
+    } else if (!validatePostalCode(value)) {
+        errorElement(document.edit.postal_code, "郵便番号はXXX-XXXXの形式で入力してください");
+    }
+}
+
+/**
+ * ファイルの形式チェック
+ */
+function validateFileField(input, label) {
+    clearFieldError(input);
+
+    const file = input.files[0];
+    if (!file) return;
+
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+    const fileName = file.name;
+    const extension = fileName.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+        errorElement(input, `${label}は jpg / jpeg / png のいずれかでアップロードしてください。`);
+    }
+}
+
+/**
  * 該当フィールドのエラーのみ削除する関数
  */
 function clearFieldError(field) {
-    // フィールド直後のすべてのエラーメッセージを削除
     let next = field.nextSibling;
     while (next) {
         if (next.nodeType === 1 && (
@@ -86,25 +135,42 @@ function clearFieldError(field) {
     serverErrors.forEach(function (el) {
         el.remove();
     });
-    // エラースタイル削除
+
     field.classList.remove("error-form");
+
+    // postal_code専用：placeholderがあれば消す
+    if (field.name === "postal_code") {
+        const placeholder = document.querySelector(".postal-error-placeholder");
+        if (placeholder) placeholder.innerHTML = "";
+    }
 }
 
-
-
 /**
- * 以下は既存の共通関数（そのまま使用）
+ * 共通関数（修正あり）
  */
-
 var errorElement = function (form, msg) {
     form.className = "error-form";
     var newElement = document.createElement("div");
-    newElement.className = "error";
+    newElement.className = "error-msg";
     var newText = document.createTextNode(msg);
     newElement.appendChild(newText);
+
+    // 郵便番号用だけ専用の場所に表示
+    if (form.name === "postal_code") {
+        const placeholder = document.querySelector(".postal-error-placeholder");
+        if (placeholder) {
+            placeholder.innerHTML = "";
+            placeholder.appendChild(newElement);
+            return;
+        }
+    }
+
     form.parentNode.insertBefore(newElement, form.nextSibling);
 };
 
+/**
+ * バリデーション関数群
+ */
 var removeElementsByClass = function (className) {
     var elements = document.getElementsByClassName(className);
     while (elements.length > 0) {
@@ -129,4 +195,8 @@ var validateTel = function (val) {
 
 var validateKana = function (val) {
     return /^[ぁ-んー\s　]+$/.test(val);
+};
+
+var validatePostalCode = function (val) {
+    return /^[0-9]{3}-[0-9]{4}$/.test(val);
 };

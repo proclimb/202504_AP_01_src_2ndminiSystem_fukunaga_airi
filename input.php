@@ -196,23 +196,29 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     <?php endif ?>
                 </div>
                 <div>
-                    <label>郵便番号<span>必須</span></label>
-                    <div class="postal-row">
-                        <input
-                            class="half-width"
-                            type="text"
-                            name="postal_code"
-                            id="postal_code"
-                            placeholder="例）100-0001 または 1000001"
-                            value="<?= isset($old['postal_code']) ? htmlspecialchars($old['postal_code']) : '' ?>">
-                        <button type="button"
-                            class="postal-code-search"
-                            id="searchAddressBtn">住所検索</button>
+                    <div>
+                        <label>郵便番号<span>必須</span></label>
+                        <div class="postal-row">
+                            <input
+                                type="text"
+                                name="postal_code"
+                                id="postal_code"
+                                placeholder="例）100-0001 または 1000001"
+                                value="<?= isset($old['postal_code']) ? htmlspecialchars($old['postal_code']) : '' ?>">
+                            <button type="button"
+                                class="postal-code-search"
+                                id="searchAddressBtn">住所検索</button>
+                        </div>
+
+                        <!-- ⭐️追加：プレースホルダ -->
+                        <div class="postal-error-placeholder"></div>
+
+                        <!-- ⭐️既存のエラー表示（そのまま） -->
+                        <?php if (isset($error_message['postal_code'])) : ?>
+                            <div class="error-msg2">
+                                <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                        <?php endif ?>
                     </div>
-                    <?php if (isset($error_message['postal_code'])) : ?>
-                        <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['postal_code']) ?></div>
-                    <?php endif ?>
                 </div>
                 <div>
                     <label>住所<span>必須</span></label>

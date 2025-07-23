@@ -277,27 +277,6 @@ form>div select {
 }
 
 /* 新規追加 */
-form>div input[type=text].half-width {
-    display: block;
-    min-width: 244px;
-    max-width: 244px;
-    float: right;
-    height: 38px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    margin: 0px 21px;
-}
 
 /* 8479 */
 input[type=radio] {
@@ -458,7 +437,7 @@ button.postal-code-search {
     padding: 8px 12px;
     background-color: #6C757D;
     color: #fff;
-    height: 37px;
+    height: 38px;
     align-items: center;
     font-size: 14px;
     border: none;
@@ -691,3 +670,45 @@ input.readonly-field[type="text"] {
 /* -------------------------------------------------------------------
    ↑ ここまで変更・追加箇所
    ------------------------------------------------------------------- */
+
+/* === フォームエラーメッセージの横崩れ防止・縦書き防止 === */
+/* エラー文が input+div の float の影響を受けないようにリセット */
+/* 縦書き防止・横に表示されるように強制リセット */
+/* 強制的にエラーメッセージをフォームの下に横書きで表示させる */
+.error-msg,
+.error,
+.error-msg2 {
+    float: none !important;
+    display: inline-block !important;
+    width: 100% !important;
+    max-width: 500px;
+    margin-top: 6px;
+    margin-left: 166px !important;
+    color: red !important;
+    writing-mode: horizontal-tb !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    clear: both !important;
+    /* ←これが特に重要 */
+}
+
+.postal-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 15px !important;
+}
+
+.postal-row input[type="text"] {
+    flex: 1 1 200px !important;
+    /* 最小200pxとして余裕があるときは伸びる */
+    min-width: 150px !important;
+    max-width: 300px;
+    height: 38px !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}

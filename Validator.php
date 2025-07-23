@@ -3,14 +3,14 @@
 class Validator
 {
     private $pdo;
+    private $error_message = [];
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
     }
-    private $error_message = [];
 
-    // 呼び出し元で使う
+    // 入力全体のバリデーション
     public function validate($data)
     {
         $this->error_message = [];
@@ -32,10 +32,8 @@ class Validator
         $trimmed_kana = preg_replace('/^[\s　]+|[\s　]+$/u', '', $kana_input);
 
         if (mb_strlen(trim($kana_input)) > 0 && empty($trimmed_kana)) {
-            // スペースのみの入力
             $this->error_message['kana'] = 'スペースのみでは入力できません';
         } elseif (empty($trimmed_kana)) {
-            // 完全な未入力
             $this->error_message['kana'] = 'ふりがなが入力されていません';
         } elseif (preg_match('/[^ぁ-んー\s　]/u', $trimmed_kana)) {
             $this->error_message['kana'] = 'ひらがなで入力してください';
@@ -58,6 +56,7 @@ class Validator
         } elseif (!preg_match('/^\d{3}-?\d{4}$/', $data['postal_code'] ?? '')) {
             $this->error_message['postal_code'] = '郵便番号はXXX-XXXX または XXXXXXX の形式で入力してください';
         }
+
         // 住所
         $trimmed_pref = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['prefecture'] ?? '');
         $trimmed_city = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['city_town'] ?? '');
@@ -76,7 +75,6 @@ class Validator
             $address_valid = false;
         }
 
-
         // 電話番号
         if (empty($data['tel'])) {
             $this->error_message['tel'] = '電話番号が入力されていません';
@@ -87,6 +85,7 @@ class Validator
         ) {
             $this->error_message['tel'] = '電話番号は12~13桁で正しく入力してください';
         }
+
         // メールアドレス
         if (empty($data['email'])) {
             $this->error_message['email'] = 'メールアドレスが入力されていません';
@@ -107,13 +106,13 @@ class Validator
                 $city_town = preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV'));
 
                 $sql = "
-            SELECT COUNT(*)
-            FROM address_master
-            WHERE
-                REPLACE(postal_code, '-', '') = :postal_code
-                AND prefecture = :prefecture
-                AND REPLACE(CONCAT(city, town), ' ', '') LIKE :city_town
-        ";
+                    SELECT COUNT(*)
+                    FROM address_master
+                    WHERE
+                        REPLACE(postal_code, '-', '') = :postal_code
+                        AND prefecture = :prefecture
+                        AND REPLACE(CONCAT(city, town), ' ', '') LIKE :city_town
+                ";
 
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
@@ -131,9 +130,26 @@ class Validator
                 $this->error_message['address'] = 'DBエラー: ' . $e->getMessage();
             }
         }
+
+        // ファイル形式チェック
+        $allowedExtensions = ['jpg', 'jpeg', 'png'];
+        $uploadedFiles = [
+            'document1' => '本人確認書類（表）',
+            'document2' => '本人確認書類（裏）'
+        ];
+
+        foreach ($uploadedFiles as $key => $label) {
+            if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
+                $fileName = $_FILES[$key]['name'];
+                $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                if (!in_array($ext, $allowedExtensions)) {
+                    $this->error_message[$key] = "{$label}は jpg / jpeg / png のいずれかでアップロードしてください。";
+                }
+            }
+        }
+
         return empty($this->error_message);
     }
-
 
     // エラーメッセージ取得
     public function getErrors()
@@ -147,9 +163,3 @@ class Validator
         return checkdate((int)$month, (int)$day, (int)$year);
     }
 }
-//現在の進捗
-/*入力値の前後、空文字のみの入力をはじく
-名前の間の半角、全角スペースの許容
-住所と郵便番号が一致しているか
-名前に使用できない文字が含まれています英語、数字記号をはじく
-*/
