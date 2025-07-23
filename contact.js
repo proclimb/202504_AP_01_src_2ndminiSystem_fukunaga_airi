@@ -1,5 +1,8 @@
 window.addEventListener('load', function () {
-    // テキスト入力のバリデーション
+    // 初期状態で郵便番号のエラー削除（PHP出力も含む）
+    clearFieldError(document.edit.postal_code);
+
+    // 以下リアルタイムバリデーション設定
     document.edit.name.addEventListener('input', validateNameField);
     document.edit.kana.addEventListener('input', validateKanaField);
     document.edit.email.addEventListener('input', validateEmailField);
@@ -28,7 +31,6 @@ window.addEventListener('load', function () {
  */
 function validateNameField() {
     clearFieldError(document.edit.name);
-
     const value = document.edit.name.value;
     if (value === "") {
         errorElement(document.edit.name, "お名前が入力されていません");
@@ -42,7 +44,6 @@ function validateNameField() {
  */
 function validateKanaField() {
     clearFieldError(document.edit.kana);
-
     const value = document.edit.kana.value;
     if (value === "") {
         errorElement(document.edit.kana, "ふりがなが入力されていません");
@@ -56,7 +57,6 @@ function validateKanaField() {
  */
 function validateEmailField() {
     clearFieldError(document.edit.email);
-
     const value = document.edit.email.value;
     if (value === "") {
         errorElement(document.edit.email, "メールアドレスが入力されていません");
@@ -70,7 +70,6 @@ function validateEmailField() {
  */
 function validateTelField() {
     clearFieldError(document.edit.tel);
-
     const value = document.edit.tel.value;
     if (value === "") {
         errorElement(document.edit.tel, "電話番号が入力されていません");
@@ -84,12 +83,11 @@ function validateTelField() {
  */
 function validatePostalCodeField() {
     clearFieldError(document.edit.postal_code);
-
     const value = document.edit.postal_code.value;
     if (value === "") {
         errorElement(document.edit.postal_code, "郵便番号が入力されていません");
     } else if (!validatePostalCode(value)) {
-        errorElement(document.edit.postal_code, "郵便番号はXXX-XXXXの形式で入力してください");
+        errorElement(document.edit.postal_code, "郵便番号はXXX-XXXX または XXXXXXX の形式で入力してください");
     }
 }
 
@@ -98,23 +96,32 @@ function validatePostalCodeField() {
  */
 function validateFileField(input, label) {
     clearFieldError(input);
-
     const file = input.files[0];
     if (!file) return;
-
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
     const fileName = file.name;
     const extension = fileName.split('.').pop().toLowerCase();
-
     if (!allowedExtensions.includes(extension)) {
         errorElement(input, `${label}は jpg / jpeg / png のいずれかでアップロードしてください。`);
     }
 }
 
 /**
- * 該当フィールドのエラーのみ削除する関数
+ * フィールドのエラー削除関数（リアル・PHP両対応）
  */
 function clearFieldError(field) {
+    // 郵便番号専用処理（placeholderとサーバー側エラー）
+    if (field.name === "postal_code") {
+        const placeholder = document.querySelector(".postal-error-placeholder");
+        if (placeholder) placeholder.innerHTML = "";
+
+        const serverError = document.querySelector(".error-msg2");
+        if (serverError && serverError.textContent.includes("郵便番号")) {
+            serverError.remove();
+        }
+    }
+
+    // 次の兄弟要素のエラー削除
     let next = field.nextSibling;
     while (next) {
         if (next.nodeType === 1 && (
@@ -130,32 +137,26 @@ function clearFieldError(field) {
         }
     }
 
-    const parent = field.parentNode;
+    // 親要素内のサーバーサイドエラーも削除
+    const parent = field.closest("div") || field.parentNode;
     const serverErrors = parent.querySelectorAll(".error-msg, .error-msg2");
     serverErrors.forEach(function (el) {
         el.remove();
     });
 
     field.classList.remove("error-form");
-
-    // postal_code専用：placeholderがあれば消す
-    if (field.name === "postal_code") {
-        const placeholder = document.querySelector(".postal-error-placeholder");
-        if (placeholder) placeholder.innerHTML = "";
-    }
 }
 
 /**
- * 共通関数（修正あり）
+ * エラーメッセージ表示関数
  */
 var errorElement = function (form, msg) {
     form.className = "error-form";
     var newElement = document.createElement("div");
     newElement.className = "error-msg";
-    var newText = document.createTextNode(msg);
-    newElement.appendChild(newText);
+    newElement.textContent = msg;
 
-    // 郵便番号用だけ専用の場所に表示
+    // 郵便番号だけ placeholder に挿入
     if (form.name === "postal_code") {
         const placeholder = document.querySelector(".postal-error-placeholder");
         if (placeholder) {
@@ -171,20 +172,6 @@ var errorElement = function (form, msg) {
 /**
  * バリデーション関数群
  */
-var removeElementsByClass = function (className) {
-    var elements = document.getElementsByClassName(className);
-    while (elements.length > 0) {
-        elements[0].parentNode.removeChild(elements[0]);
-    }
-};
-
-var removeClass = function (className) {
-    var elements = Array.from(document.getElementsByClassName(className));
-    elements.forEach(function (el) {
-        el.classList.remove(className);
-    });
-};
-
 var validateMail = function (val) {
     return /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+\.[A-Za-z0-9]+$/.test(val);
 };
@@ -198,5 +185,5 @@ var validateKana = function (val) {
 };
 
 var validatePostalCode = function (val) {
-    return /^[0-9]{3}-[0-9]{4}$/.test(val);
+    return /^[0-9]{3}-?[0-9]{4}$/.test(val);
 };

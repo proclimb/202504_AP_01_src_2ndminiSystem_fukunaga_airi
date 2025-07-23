@@ -210,69 +210,66 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                                 id="searchAddressBtn">住所検索</button>
                         </div>
 
-                        <!-- ⭐️追加：プレースホルダ -->
-                        <div class="postal-error-placeholder"></div>
-
-                        <!-- ⭐️既存のエラー表示（そのまま） -->
-                        <?php if (isset($error_message['postal_code'])) : ?>
-                            <div class="error-msg2">
-                                <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                        <!-- ⭐️変更：プレースホルダにPHPエラーも統合 -->
+                        <div class="postal-error-placeholder">
+                            <?php if (isset($error_message['postal_code'])): ?>
+                                <div class="error-msg2"><?= htmlspecialchars($error_message['postal_code']) ?></div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                    <div>
+                        <label>住所<span>必須</span></label>
+                        <input
+                            type="text"
+                            name="prefecture"
+                            id="prefecture"
+                            placeholder="都道府県"
+                            value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
+                        <input
+                            type="text"
+                            name="city_town"
+                            id="city_town"
+                            placeholder="市区町村・番地"
+                            value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
+                        <input
+                            type="text"
+                            name="building"
+                            placeholder="建物名・部屋番号  **省略可**"
+                            value="<?= htmlspecialchars($old['building'] ?? '') ?>">
+                        <?php if (isset($error_message['address'])) : ?>
+                            <div class="error-msg">
+                                <?= htmlspecialchars($error_message['address']) ?></div>
                         <?php endif ?>
                     </div>
+                    <div>
+                        <label>電話番号<span>必須</span></label>
+                        <input
+                            type="text"
+                            name="tel"
+                            placeholder="例）000-000-0000"
+                            value="<?= htmlspecialchars($old['tel']) ?>">
+                        <?php if (isset($error_message['tel'])) : ?>
+                            <div class="error-msg">
+                                <?= htmlspecialchars($error_message['tel']) ?></div>
+                        <?php endif ?>
+                    </div>
+                    <div>
+                        <label>メールアドレス<span>必須</span></label>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="例）guest@example.com"
+                            value="<?= htmlspecialchars($old['email']) ?>">
+                        <?php if (isset($error_message['email'])) : ?>
+                            <div class="error-msg">
+                                <?= htmlspecialchars($error_message['email']) ?></div>
+                        <?php endif  ?>
+                    </div>
                 </div>
-                <div>
-                    <label>住所<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="prefecture"
-                        id="prefecture"
-                        placeholder="都道府県"
-                        value="<?= htmlspecialchars($old['prefecture'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="city_town"
-                        id="city_town"
-                        placeholder="市区町村・番地"
-                        value="<?= htmlspecialchars($old['city_town'] ?? '') ?>">
-                    <input
-                        type="text"
-                        name="building"
-                        placeholder="建物名・部屋番号  **省略可**"
-                        value="<?= htmlspecialchars($old['building'] ?? '') ?>">
-                    <?php if (isset($error_message['address'])) : ?>
-                        <div class="error-msg">
-                            <?= htmlspecialchars($error_message['address']) ?></div>
-                    <?php endif ?>
-                </div>
-                <div>
-                    <label>電話番号<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="tel"
-                        placeholder="例）000-000-0000"
-                        value="<?= htmlspecialchars($old['tel']) ?>">
-                    <?php if (isset($error_message['tel'])) : ?>
-                        <div class="error-msg">
-                            <?= htmlspecialchars($error_message['tel']) ?></div>
-                    <?php endif ?>
-                </div>
-                <div>
-                    <label>メールアドレス<span>必須</span></label>
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="例）guest@example.com"
-                        value="<?= htmlspecialchars($old['email']) ?>">
-                    <?php if (isset($error_message['email'])) : ?>
-                        <div class="error-msg">
-                            <?= htmlspecialchars($error_message['email']) ?></div>
-                    <?php endif  ?>
-                </div>
-            </div>
-            <button type="submit">確認画面へ</button>
-            <a href="index.php">
-                <button type="button">TOPに戻る</button>
-            </a>
+                <button type="submit">確認画面へ</button>
+                <a href="index.php">
+                    <button type="button">TOPに戻る</button>
+                </a>
         </form>
     </div>
 </body>
