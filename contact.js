@@ -98,7 +98,7 @@ function validateFileField(input, label) {
     clearFieldError(input);
     const file = input.files[0];
     if (!file) return;
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+    const allowedExtensions = ['jpg', 'jpeg', 'png'];
     const fileName = file.name;
     const extension = fileName.split('.').pop().toLowerCase();
     if (!allowedExtensions.includes(extension)) {

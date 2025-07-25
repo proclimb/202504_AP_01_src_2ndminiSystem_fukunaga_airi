@@ -114,21 +114,39 @@ class Validator
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
         }
 
-        // ファイル
+        // ▼ ① ファイルだけは最初に処理（拡張子OKならセッション保存）
         $allowedExtensions = ['jpg', 'jpeg', 'png'];
         $files = [
             'document1' => '本人確認書類（表）',
             'document2' => '本人確認書類（裏）'
         ];
+        $tmpDir = __DIR__ . '/../tmp_uploads/';
+        if (!is_dir($tmpDir)) {
+            mkdir($tmpDir, 0777, true);
+        }
+
         foreach ($files as $key => $label) {
             if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
                 $ext = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
                 if (!in_array($ext, $allowedExtensions)) {
                     $this->error_message[$key] = "{$label}は jpg / jpeg / png のいずれかでアップロードしてください。";
+                } else {
+                    $filename = uniqid($key . '_') . '.' . $ext;
+                    $destination = $tmpDir . $filename;
+
+                    if (move_uploaded_file($_FILES[$key]['tmp_name'], $destination)) {
+                        $_SESSION[$key . '_path'] = $destination;
+                        $_SESSION[$key . '_original_name'] = $_FILES[$key]['name'];
+                    } else {
+                        $this->error_message[$key] = "{$label}のアップロードに失敗しました。";
+                    }
                 }
+            } elseif (!empty($_SESSION[$key . '_path']) && file_exists($_SESSION[$key . '_path'])) {
+                continue;
+            } else {
+                $this->error_message[$key] = "{$label}がアップロードされていません。";
             }
         }
-
         return empty($this->error_message);
     }
 

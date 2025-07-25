@@ -4,27 +4,36 @@
  * 更新・削除画面
  */
 
+
+
 require_once 'Db.php';
 require_once 'User.php';
 require_once 'Validator.php';
 
 session_cache_limiter('none');
 session_start();
-unset($_SESSION['input_data']);
 
-if (!empty($_POST) && empty($_SESSION['input_data'])) {
+if (!empty($_POST)) {
     if (!empty($_POST['birth_date']) && preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $_POST['birth_date'], $m)) {
         $_POST['birth_year'] = $m[1];
         $_POST['birth_month'] = $m[2];
         $_POST['birth_day'] = $m[3];
     }
+
     $validator = new Validator($pdo);
-    if ($validator->validate($_POST)) {
+    $isValid = $validator->validate($_POST);
+
+    if ($isValid) {
         $_SESSION['input_data'] = $_POST;
         header('Location:update.php');
         exit();
     } else {
         $error_message = $validator->getErrors();
+        $error_message_files = [
+            'document1' => $error_message['document1'] ?? null,
+            'document2' => $error_message['document2'] ?? null,
+        ];
+
         if (!isset($_POST['gender'])) {
             $_POST['gender'] = '1';
         }
@@ -34,6 +43,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $user = new User($pdo);
     $_POST = $user->findById($id);
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -138,6 +148,42 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg"><?= htmlspecialchars($error_message['email']) ?></div>
                     <?php endif ?>
+                </div>
+                <div>
+                    <label>本人確認書類（表）</label>
+                    <input
+                        type="file"
+                        name="document1"
+                        id="document1"
+                        accept="image/png, image/jpeg, image/jpg">
+                    <span id="filename1" class="filename-display"></span>
+                    <div class="preview-container">
+                        <img id="preview1" src="#" alt="プレビュー画像１" style="display: none; max-width: 200px; margin-top: 8px;">
+                    </div>
+                    <!-- エラー時はドキュメントを保持せず、破棄する -->
+                    <?php if (isset($error_message_files['document1'])) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($error_message_files['document1']) ?></div>
+                    <?php endif ?>
+                </div>
+
+                <div>
+                    <label>本人確認書類（裏）</label>
+                    <input
+                        type="file"
+                        name="document2"
+                        id="document2"
+                        accept="image/png, image/jpeg, image/jpg">
+                    <span id="filename2" class="filename-display"></span>
+                    <div class="preview-container">
+                        <img id="preview2" src="#" alt="プレビュー画像２" style="display: none; max-width: 200px; margin-top: 8px;">
+                    </div>
+                    <!-- エラー時はドキュメントを保持せず、破棄する -->
+                    <?php if (isset($error_message_files['document2'])) : ?>
+                        <div class="error-msg">
+                            <?= htmlspecialchars($error_message_files['document2']) ?></div>
+                    <?php endif ?>
+
                 </div>
             </div>
             <button type="submit">更新</button>
