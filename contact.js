@@ -102,7 +102,7 @@ function validateFileField(input, label) {
     const fileName = file.name;
     const extension = fileName.split('.').pop().toLowerCase();
     if (!allowedExtensions.includes(extension)) {
-        errorElement(input, `${label}は jpg / jpeg / png のいずれかでアップロードしてください。`);
+        errorElement(input, `ファイル形式は PNG または JPEG のみ許可されています`);
     }
 }
 

@@ -129,7 +129,7 @@ class Validator
             if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
                 $ext = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
                 if (!in_array($ext, $allowedExtensions)) {
-                    $this->error_message[$key] = "{$label}は jpg / jpeg / png のいずれかでアップロードしてください。";
+                    $this->error_message[$key] = "ファイル形式は PNG または JPEG のみ許可されています";
                 } else {
                     $filename = uniqid($key . '_') . '.' . $ext;
                     $destination = $tmpDir . $filename;
