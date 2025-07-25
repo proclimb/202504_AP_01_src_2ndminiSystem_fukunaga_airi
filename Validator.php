@@ -137,14 +137,10 @@ class Validator
                     if (move_uploaded_file($_FILES[$key]['tmp_name'], $destination)) {
                         $_SESSION[$key . '_path'] = $destination;
                         $_SESSION[$key . '_original_name'] = $_FILES[$key]['name'];
-                    } else {
-                        $this->error_message[$key] = "{$label}のアップロードに失敗しました。";
                     }
                 }
             } elseif (!empty($_SESSION[$key . '_path']) && file_exists($_SESSION[$key . '_path'])) {
                 continue;
-            } else {
-                $this->error_message[$key] = "{$label}がアップロードされていません。";
             }
         }
         return empty($this->error_message);
