@@ -42,7 +42,7 @@ class Validator
         if (empty($data['birth_year']) || empty($data['birth_month']) || empty($data['birth_day'])) {
             $this->error_message['birth_date'] = '生年月日が入力されていません';
         } elseif (!$this->isValidDate($data['birth_year'] ?? '', $data['birth_month'] ?? '', $data['birth_day'] ?? '')) {
-            $this->error_message['birth_date'] = '存在しない日付です';
+            $this->error_message['birth_date'] = '存在しない日付です,正しい日にちを入力してください';
         } elseif (strtotime($data['birth_year'] . '-' . $data['birth_month'] . '-' . $data['birth_day']) > strtotime(date('Y-m-d'))) {
             $this->error_message['birth_date'] = '生年月日が未来日になっています。正しい日付を入力してください';
         }
