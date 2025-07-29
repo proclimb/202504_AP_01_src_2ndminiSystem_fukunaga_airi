@@ -42,7 +42,7 @@ class Validator
         if (empty($data['birth_year']) || empty($data['birth_month']) || empty($data['birth_day'])) {
             $this->error_message['birth_date'] = '生年月日が入力されていません';
         } elseif (!$this->isValidDate($data['birth_year'] ?? '', $data['birth_month'] ?? '', $data['birth_day'] ?? '')) {
-            $this->error_message['birth_date'] = '生年月日が正しくありません';
+            $this->error_message['birth_date'] = '存在しない日付です';
         } elseif (strtotime($data['birth_year'] . '-' . $data['birth_month'] . '-' . $data['birth_day']) > strtotime(date('Y-m-d'))) {
             $this->error_message['birth_date'] = '生年月日が未来日になっています。正しい日付を入力してください';
         }
@@ -104,7 +104,7 @@ class Validator
             !preg_match('/^0\d{1,4}-\d{1,4}-\d{3,4}$/', $data['tel']) ||
             mb_strlen($data['tel']) < 12 || mb_strlen($data['tel']) > 13
         ) {
-            $this->error_message['tel'] = '電話番号は12~13桁で正しく入力してください';
+            $this->error_message['tel'] = '電話番号は「090-1234-5678」のようにハイフンを含めて正しく入力してください';
         }
 
         // メールアドレス

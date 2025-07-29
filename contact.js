@@ -44,10 +44,13 @@ function validateNameField() {
  */
 function validateKanaField() {
     clearFieldError(document.edit.kana);
-    const value = document.edit.kana.value;
-    if (value === "") {
+
+    const rawValue = document.edit.kana.value;
+    const trimmed = rawValue.replace(/[\s　]/g, ""); // スペース除去
+
+    if (trimmed === "") {
         errorElement(document.edit.kana, "ふりがなが入力されていません");
-    } else if (!validateKana(value)) {
+    } else if (!validateKana(rawValue)) {
         errorElement(document.edit.kana, "ひらがなで入力してください");
     }
 }
@@ -74,7 +77,7 @@ function validateTelField() {
     if (value === "") {
         errorElement(document.edit.tel, "電話番号が入力されていません");
     } else if (!validateTel(value)) {
-        errorElement(document.edit.tel, "電話番号は12~13桁で正しく入力してください");
+        errorElement(document.edit.tel, "電話番号は「090-1234-5678」のようにハイフンを含めて正しく入力してください");
     }
 }
 
