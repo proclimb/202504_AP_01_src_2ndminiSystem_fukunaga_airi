@@ -65,10 +65,14 @@ function validateKanaField() {
  */
 function validateEmailField() {
     clearFieldError(document.edit.email);
-    const value = document.edit.email.value;
-    if (value === "") {
+    const rawValue = document.edit.email.value;
+    const trimmed = rawValue.trim();
+
+    if (rawValue !== "" && trimmed === "") {
+        errorElement(document.edit.email, "スペースのみでは入力できません");
+    } else if (trimmed === "") {
         errorElement(document.edit.email, "メールアドレスが入力されていません");
-    } else if (!validateMail(value)) {
+    } else if (!validateMail(trimmed)) {
         errorElement(document.edit.email, "有効なメールアドレスを入力してください");
     }
 }
@@ -78,10 +82,14 @@ function validateEmailField() {
  */
 function validateTelField() {
     clearFieldError(document.edit.tel);
-    const value = document.edit.tel.value;
-    if (value === "") {
+    const rawValue = document.edit.tel.value;
+    const trimmed = rawValue.trim();
+
+    if (rawValue !== "" && trimmed === "") {
+        errorElement(document.edit.tel, "スペースのみでは入力できません");
+    } else if (trimmed === "") {
         errorElement(document.edit.tel, "電話番号が入力されていません");
-    } else if (!validateTel(value)) {
+    } else if (!validateTel(trimmed)) {
         errorElement(document.edit.tel, "電話番号は「090-1234-5678」のようにハイフンを含めて正しく入力してください");
     }
 }
@@ -91,13 +99,18 @@ function validateTelField() {
  */
 function validatePostalCodeField() {
     clearFieldError(document.edit.postal_code);
-    const value = document.edit.postal_code.value;
-    if (value === "") {
+    const rawValue = document.edit.postal_code.value;
+    const trimmed = rawValue.trim();
+
+    if (rawValue !== "" && trimmed === "") {
+        errorElement(document.edit.postal_code, "スペースのみでは入力できません");
+    } else if (trimmed === "") {
         errorElement(document.edit.postal_code, "郵便番号が入力されていません");
-    } else if (!validatePostalCode(value)) {
+    } else if (!validatePostalCode(trimmed)) {
         errorElement(document.edit.postal_code, "郵便番号はXXX-XXXX または XXXXXXX の形式で入力してください");
     }
 }
+
 
 /**
  * ファイルの形式チェック

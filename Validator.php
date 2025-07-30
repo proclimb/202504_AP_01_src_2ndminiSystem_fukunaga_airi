@@ -105,21 +105,33 @@ class Validator
         }
 
         // 電話番号
-        if (empty($data['tel'])) {
+        $tel_raw = $data['tel'] ?? '';
+        $tel_trimmed = preg_replace('/^[\s　]+|[\s　]+$/u', '', $tel_raw);
+
+        if ($tel_raw === '') {
             $this->error_message['tel'] = '電話番号が入力されていません';
+        } elseif ($tel_trimmed === '') {
+            $this->error_message['tel'] = 'スペースのみでは入力できません';
         } elseif (
-            !preg_match('/^0\d{1,4}-\d{1,4}-\d{3,4}$/', $data['tel']) ||
-            mb_strlen($data['tel']) < 12 || mb_strlen($data['tel']) > 13
+            !preg_match('/^0\d{1,4}-\d{1,4}-\d{3,4}$/', $tel_trimmed) ||
+            mb_strlen($tel_trimmed) < 12 || mb_strlen($tel_trimmed) > 13
         ) {
             $this->error_message['tel'] = '電話番号は「090-1234-5678」のようにハイフンを含めて正しく入力してください';
         }
 
+
         // メールアドレス
-        if (empty($data['email'])) {
+        $email_raw = $data['email'] ?? '';
+        $email_trimmed = preg_replace('/^[\s　]+|[\s　]+$/u', '', $email_raw);
+
+        if ($email_raw === '') {
             $this->error_message['email'] = 'メールアドレスが入力されていません';
-        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        } elseif ($email_trimmed === '') {
+            $this->error_message['email'] = 'スペースのみでは入力できません';
+        } elseif (!filter_var($email_trimmed, FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
         }
+
 
         // ▼ ① ファイルだけは最初に処理（拡張子OKならセッション保存）
         $allowedExtensions = ['jpg', 'jpeg', 'png'];
