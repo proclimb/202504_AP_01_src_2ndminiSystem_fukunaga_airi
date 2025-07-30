@@ -34,8 +34,8 @@ if (!empty($_POST)) {
             'document2' => $error_message['document2'] ?? null,
         ];
 
-        if (!isset($_POST['gender'])) {
-            $_POST['gender'] = '1';
+        if (!isset($_POST['gender_flag'])) {
+            $_POST['gender_flag'] = '1';
         }
     }
 } else {
@@ -106,7 +106,7 @@ if (!empty($_POST)) {
                 </div>
                 <div>
                     <label>性別<span>必須</span></label>
-                    <?php $gender = $_POST['gender'] ?? '1'; ?>
+                    <?php $gender = $_POST['gender_flag'] ?? '1'; ?>
                     <label class="gender"><input type="radio" name="gender" value='1' <?= $gender == '1' ? 'checked' : '' ?>>男性</label>
                     <label class="gender"><input type="radio" name="gender" value='2' <?= $gender == '2' ? 'checked' : '' ?>>女性</label>
                     <label class="gender"><input type="radio" name="gender" value='3' <?= $gender == '3' ? 'checked' : '' ?>>その他</label>

@@ -9,7 +9,7 @@ window.addEventListener('load', function () {
     document.edit.tel.addEventListener('input', validateTelField);
     document.edit.postal_code.addEventListener('input', validatePostalCodeField);
 
-    // ファイル形式チェック（表）
+    //ファイル形式チェック（表）
     const front = document.getElementById('document1');
     if (front) {
         front.addEventListener('change', function () {
@@ -42,18 +42,23 @@ function validateNameField() {
 /**
  * ふりがなのリアルタイムバリデーション
  */
+
 function validateKanaField() {
     clearFieldError(document.edit.kana);
 
     const rawValue = document.edit.kana.value;
-    const trimmed = rawValue.replace(/[\s　]/g, ""); // スペース除去
 
-    if (trimmed === "") {
+    const noSpaces = rawValue.replace(/[\s　]/g, ""); // 全角・半角スペース除去
+
+    if (rawValue !== "" && noSpaces === "") {
+        errorElement(document.edit.kana, "スペースのみでは入力できません");
+    } else if (noSpaces === "") {
         errorElement(document.edit.kana, "ふりがなが入力されていません");
-    } else if (!validateKana(rawValue)) {
+    } else if (!validateKana(noSpaces)) {
         errorElement(document.edit.kana, "ひらがなで入力してください");
     }
 }
+
 
 /**
  * メールのリアルタイムバリデーション

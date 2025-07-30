@@ -16,12 +16,19 @@ class Validator
         $this->error_message = [];
 
         // 名前
-        $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $data['name'] ?? '');
-        if (empty($trimmed_name)) {
+        $name_raw = $data['name'] ?? '';
+        $trimmed_name = preg_replace('/^[\s　]+|[\s　]+$/u', '', $name_raw);
+
+        if ($name_raw === '') {
+            $this->error_message['name'] = '名前が入力されていません';
+        } elseif ($trimmed_name === '') {
             $this->error_message['name'] = 'スペースのみでは入力できません';
         } elseif (mb_strlen($trimmed_name) > 20) {
             $this->error_message['name'] = '名前は20文字以内で入力してください';
-        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name) || preg_match('/[0-9!"#\$%&\'\(\)\*=\+\,\-\.\/\\:;<=>?@\[\]^_`\{|\}~]/u', $trimmed_name)) {
+        } elseif (
+            !preg_match('/^[ぁ-んァ-ヶー一-龠々ｦ-ﾟー\s　]+$/u', $trimmed_name) ||
+            preg_match('/[0-9!"#\$%&\'\(\)\*=\+\,\-\.\/\\:;<=>?@\[\]^_`\{|\}~]/u', $trimmed_name)
+        ) {
             $this->error_message['name'] = '名前に使用できない文字が含まれています';
         }
 
