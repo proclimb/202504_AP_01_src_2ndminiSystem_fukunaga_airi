@@ -283,13 +283,13 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     </div>
                 </button>
 
-                <button class="flip-button flip-button-home" onclick="history.back()">
-                    <div class="inner">
-                        <div class="face front">TOPに戻る</div>
-                        <div class="face back"></div> <!-- ここにアイコンが入る -->
-                    </div>
-                </button>
-
+                <a href="index.php">
+                    <button type="button" class="flip-button flip-button-home">
+                        <div class="inner">
+                            <div class="face front">TOPに戻る</div>
+                        </div>
+                    </button>
+                </a>
             </div>
         </form>
 
