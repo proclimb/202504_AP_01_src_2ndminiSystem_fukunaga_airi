@@ -83,18 +83,24 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     <link rel="stylesheet" href="style_new.css">
     <script src="contact.js"></script>
 
+
+
 </head>
 
 
 <body>
     <div>
-        <h1>mini System</h1>
+
+        <h1 class="page-title">
+            <a href="index.php">mini System</a>
+        </h1>
+
     </div>
     <div>
-        <h2>登録画面</h2>
+        <h2 class="page-subtitle">登録画面</h2>
     </div>
     <div>
-        <form action="input.php" method="post" onsubmit="return validate();" name="edit">
+        <form id="edit-form" action="input.php" method="post" onsubmit="return validate();" name="edit">
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -264,16 +270,31 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         <div class="error-msg"><?= htmlspecialchars($error_message['email']) ?></div>
                     <?php endif  ?>
                 </div>
+            </div>
+            <!-- ↑ ここまでが “白パネル内” -->
 
-                <button type="submit">確認画面へ</button>
-                <a href="index.php">
-                    <button type="button">TOPに戻る</button>
-                </a>
+
+            <!-- ★ パネル外に出したボタン群 ★ -->
+            <div class="btn-group outside-panel">
+                <button type="submit" form="edit-form" class="flip-button">
+                    <div class="inner">
+                        <div class="face front">確認画面へ</div>
+                        <div class="face back"></div>
+                    </div>
+                </button>
+
+                <button class="flip-button flip-button-home" onclick="history.back()">
+                    <div class="inner">
+                        <div class="face front">TOPに戻る</div>
+                        <div class="face back"></div> <!-- ここにアイコンが入る -->
+                    </div>
+                </button>
+
+            </div>
         </form>
-    </div>
-</body>
 
-<script src="postalcodesearch.js"></script>
-<script src="contact.js"></script>
+        <script src="postalcodesearch.js"></script>
+        <script src="contact.js"></script>
+</body>
 
 </html>

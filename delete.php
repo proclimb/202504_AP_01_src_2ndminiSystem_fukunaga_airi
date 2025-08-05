@@ -41,20 +41,31 @@ $user->delete($id);
 </head>
 
 <body>
-    <div>
-        <h1>mini System</h1>
-    </div>
+
+    <header class="site-header">
+        <h1 class="page-title">
+            <a href="index.php">mini System</a>
+        </h1>
+    </header>
+
     <div>
         <h2>削除完了画面</h2>
     </div>
     <div>
         <div>
-            <h1>削除完了</h1>
-            <p>
-                削除しました。<br>
-            </p>
+            <section class="completion-content">
+                <h1>削除完了。</h1>
+                <p>
+                    削除しました。<br>
+                </p>
+            </section>
             <a href="index.php">
-                <button type="button">TOPに戻る</button>
+                <button class="flip-button flip-button-home">
+                    <div class="inner">
+                        <div class="face front">TOPに戻る</div>
+                        <div class="face back"></div> <!-- ここにアイコンが入る -->
+                    </div>
+                </button>
             </a>
         </div>
     </div>

@@ -87,21 +87,29 @@ $address->create([
 </head>
 
 <body>
-    <div>
-        <h1>mini System</h1>
-    </div>
+    <h1 class="page-title">
+        <a href="index.php">mini System</a>
+    </h1>
     <div>
         <h2>完了画面</h2>
     </div>
     <div>
         <div>
-            <h1>登録完了</h1>
-            <p>
-                登録ありがとうございました。<br>
-            </p>
-            <a href="index.php">
-                <button type="button">TOPに戻る</button>
-            </a>
+            <section class="completion-panel">
+                <div class="completion-content">
+                    <h1>登録完了</h1>
+                    <p>
+                        登録ありがとうございました。<br>
+                    </p>
+                    <a href="index.php">
+                        <button class="flip-button flip-button-home">
+                            <div class="inner">
+                                <div class="face front">TOPに戻る</div>
+                                <div class="face back"></div> <!-- ここにアイコンが入る -->
+                            </div>
+                        </button>
+                    </a>
+                </div>
         </div>
     </div>
 </body>
