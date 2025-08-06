@@ -1258,6 +1258,7 @@ form .radio-row label {
 /* インプット類をダーク背景×白文字に */
 form input[type="text"],
 form input[type="email"],
+form input[type="password"],
 form textarea,
 form select {
     background-color: #333 !important;
@@ -1772,7 +1773,8 @@ button.flip-button.flip-button-register {
 
 .form.container {
     width: 400px;
-    padding: 2em;
+    margin: 0 auto;
+    padding: 1em;
 }
 
 /* pas*/
@@ -1786,25 +1788,54 @@ button.flip-button.flip-button-register {
     vertical-align: middle;
 }
 
+/* style_new.css の最後に追加 */
 
-.form-group input[type="email"],
-.form-group input[type="password"] {
-    /* 幅は100%のまま、上下左右の余白を広げる */
-    display: inline-block !important;
-    width: 150px;
-    vertical-align: top;
+/* ログインフォーム内の全 input を対象に */
+.login-form .form-group input {
+    /* Bootstrap 固定幅ルールをリセット */
+    float: none !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.6em 0.8em !important;
+    box-sizing: border-box !important;
+
+    /* Flexbox で残り幅を占有 */
+    flex: 1 !important;
 }
 
-/* フォーカス時に輪郭を出すと見やすい */
-.form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(100, 150, 250, 0.3);
+/* ラベルと input を横並びに */
+.login-form .form-group {
+    display: flex;
+    align-items: center;
 }
 
-/* ボタンも揃えておきたい場合 */
-button[type="submit"] {
-    padding: 0.75em 1.5em;
-    font-size: 1rem;
-    cursor: pointer;
+/* 最初のラベルを固定幅 */
+.login-form .form-group label:first-of-type {
+    width: 120px;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+/* ボタン行は中央寄せ */
+.login-form .button-group {
+    justify-content: center;
+}
+
+/* ログインフォーム専用のラベル幅固定 */
+.login-form .form-group label:first-of-type {
+    width: 120px !important;
+    flex-shrink: 0 !important;
+    margin-right: 8px !important;
+}
+
+/* Flexbox で横並びに */
+.login-form .form-group {
+    display: flex;
+    align-items: center;
+}
+
+.login-form .form-group label {
+    white-space: nowrap;
+    /* 単語内改行を禁止 */
 }
