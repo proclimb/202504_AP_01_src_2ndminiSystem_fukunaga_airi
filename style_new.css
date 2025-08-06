@@ -1769,3 +1769,42 @@ button.flip-button.flip-button-register {
     color: inherit;
     text-decoration: none;
 }
+
+.form.container {
+    width: 400px;
+    padding: 2em;
+}
+
+/* pas*/
+.show-pw {
+    margin-left: 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.show-pw input {
+    vertical-align: middle;
+}
+
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    /* 幅は100%のまま、上下左右の余白を広げる */
+    display: inline-block !important;
+    width: 150px;
+    vertical-align: top;
+}
+
+/* フォーカス時に輪郭を出すと見やすい */
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(100, 150, 250, 0.3);
+}
+
+/* ボタンも揃えておきたい場合 */
+button[type="submit"] {
+    padding: 0.75em 1.5em;
+    font-size: 1rem;
+    cursor: pointer;
+}

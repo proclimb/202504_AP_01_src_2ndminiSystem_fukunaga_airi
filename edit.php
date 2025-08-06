@@ -256,7 +256,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                             type="submit"
                             class="flip-button flip-button-delete"
                             formaction="delete.php"
-                            formmethod="post">
+                            formmethod="post" onclick="return confirm('本当に削除しますか？');">
                             <div class="inner">
                                 <div class="face front">削除</div>
                                 <div class="face back"></div>
