@@ -35,17 +35,23 @@ $_POST = $user->findById($id);
                     required>
             </div>
 
-            <div class="form-group">
-                <label for="password">パスワード</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    required>
-                <label class="show-pw">
-                    <input type="checkbox" id="togglePw"> 表示
-                </label>
+            <div class="form-block">
+                <label>パスワード<span>必須</span></label>
+                <div class="password-wrapper">
+                    <input type="password"
+                        class="password-input"
+                        name="password"
+                        id="password"
+                        placeholder="ここにパスワードを打ち込んでください">
+                    <label class="show-pw">
+                        <input type="checkbox" id="togglePw"> 表示
+                    </label>
+                </div>
+                <?php if (isset($error_message['password'])) : ?>
+                    <div class="error-msg"><?= htmlspecialchars($error_message['password']) ?></div>
+                <?php endif ?>
             </div>
+
 
             <div class="form-group button-group">
                 <label></label>

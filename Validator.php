@@ -100,7 +100,9 @@ class Validator
             }
         }
         // パスワード
-
+     if(empty($data['password'])){
+        $this-> error_message['password'] ="パスワードが入力されていません";
+     } else if (strlen(($data['password'])< 8 || strlen(($data['password'])< )))
 
 
         // 郵便番号と住所の整合性チェック

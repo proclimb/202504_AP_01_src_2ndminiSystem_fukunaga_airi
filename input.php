@@ -280,6 +280,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         class="password-input"
                         name="password"
                         placeholder="ここにパスワードを打ち込んでください">
+                    <label class="show-pw">
+                        <input type="checkbox" id="togglePw"> 表示
+                    </label>
                     <?php if (isset($old['password'])) : ?>
                         <div class="error-msg"><?= htmlspecialchars(($error_message['password'])) ?>
                         </div><?php endif ?>
@@ -291,6 +294,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         class="password-input"
                         name="password2"
                         placeholder="もう一度パスワードを入力してください">
+                    <label class="show-pw">
+                        <input type="checkbox" id="togglePw2"> 表示
+                    </label>
                     <?php if (isset($old['password2'])) : ?>
                         <div class="error-msg"><?= htmlspecialchars(($error_message['password2'])) ?>
                         </div><?php endif ?>
@@ -320,9 +326,10 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
             </div>
     </div>
     </form>
-
+    <script src="pass.js" defer></script>
     <script src="postalcodesearch.js"></script>
     <script src="contact.js"></script>
+
 </body>
 
 </html>
