@@ -63,6 +63,7 @@ $users = $userModel->fetchUsersWithKeyword(
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
+    <link rel="stylesheet" href="form.css">
 </head>
 
 <body class="dashboard-page">

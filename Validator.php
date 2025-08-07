@@ -82,12 +82,26 @@ class Validator
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
         } else {
-            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM user_base WHERE email =:email');
-            $stmt->execute([':email' => $data['email']]);
+            if (!empty($data['id'])) {
+                // 編集時：自分のIDは除外する
+                $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM user_base WHERE email = :email AND id != :id');
+                $stmt->execute([
+                    ':email' => $data['email'],
+                    ':id' => $data['id']
+                ]);
+            } else {
+                // 新規登録時
+                $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM user_base WHERE email = :email');
+                $stmt->execute([':email' => $data['email']]);
+            }
+
             if ($stmt->fetchColumn() > 0) {
                 $this->error_message['email'] = "このメールアドレスは既に登録されています";
             }
         }
+        // パスワード
+
+
 
         // 郵便番号と住所の整合性チェック
         if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {

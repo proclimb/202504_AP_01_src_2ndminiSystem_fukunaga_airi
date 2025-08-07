@@ -81,6 +81,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
+    <link rel="stylesheet" href="form.css">
     <script src="contact.js"></script>
 
 
@@ -100,7 +101,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
         <h2 class="page-subtitle">登録画面</h2>
     </div>
     <div>
-        <form id="edit-form" action="input.php" method="post" onsubmit="return validate();" name="edit">
+        <form id="edit-form" action="input.php" method="post" name="edit" onsubmit="return validateAllFields()">
+
+
             <h1 class="contact-title">登録内容入力</h1>
             <p>登録内容をご入力の上、「確認画面へ」ボタンをクリックしてください。</p>
             <div>
@@ -270,7 +273,30 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         <div class="error-msg"><?= htmlspecialchars($error_message['email']) ?></div>
                     <?php endif  ?>
                 </div>
+                <!-- パスワード -->
+                <div class="form-block">
+                    <label>パスワード<spaN>必須</spaN></label>
+                    <input type="password"
+                        class="password-input"
+                        name="password"
+                        placeholder="ここにパスワードを打ち込んでください">
+                    <?php if (isset($old['password'])) : ?>
+                        <div class="error-msg"><?= htmlspecialchars(($error_message['password'])) ?>
+                        </div><?php endif ?>
+
+                </div>
+                <div class="form-block">
+                    <label>パスワード確認用<span>必須</span></label>
+                    <input type="password"
+                        class="password-input"
+                        name="password2"
+                        placeholder="もう一度パスワードを入力してください">
+                    <?php if (isset($old['password2'])) : ?>
+                        <div class="error-msg"><?= htmlspecialchars(($error_message['password2'])) ?>
+                        </div><?php endif ?>
+                </div>
             </div>
+
             <!-- ↑ ここまでが “白パネル内” -->
 
 
@@ -292,10 +318,11 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     </button>
                 </a>
             </div>
-        </form>
+    </div>
+    </form>
 
-        <script src="postalcodesearch.js"></script>
-        <script src="contact.js"></script>
+    <script src="postalcodesearch.js"></script>
+    <script src="contact.js"></script>
 </body>
 
 </html>

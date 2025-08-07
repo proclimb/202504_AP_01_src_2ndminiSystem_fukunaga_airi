@@ -1839,3 +1839,8 @@ button.flip-button.flip-button-register {
     white-space: nowrap;
     /* 単語内改行を禁止 */
 }
+
+.form-block input {
+    width: 100% !important;
+    max-width: 400px !important;
+}

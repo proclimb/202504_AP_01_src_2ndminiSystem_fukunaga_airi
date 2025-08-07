@@ -1,0 +1,132 @@
+/*　本体*/
+form {
+    border: solid 1px #ddd;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #fff;
+    margin-bottom: 50px;
+}
+
+form h1 {
+    letter-spacing: 2px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0 0 15px;
+}
+
+/* 各入力ブロック　(ラベル+input)*/
+.form-block {
+
+    margin-bottom: 20px;
+}
+
+.form-block input,
+.form-block select,
+.form-block textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    background: #333;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+/*エラーメッセージ*/
+.error-msg,
+.error-msg2 {
+    color: red;
+    display: inline-block;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 6px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+
+/*　ラベルやスパン装飾*/
+form label {
+    color: #fff;
+    font-weight: bold;
+    width: 150px;
+}
+
+label span {
+    background: #fb3b6f;
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+
+/*性別ボタン、郵便番号など*/
+.radio-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.radio-row input[type="radio"] {
+    margin: 0;
+    transform: translateY(1px);
+}
+
+.postal-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+}
+
+.postal-row input[type="text"] {
+    flex: 1 1 200px;
+    min-width: 150px;
+    max-width: 300px;
+    height: 38px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 確認ボタン*/
+.btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 12px 26px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #7b7c7b;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.password-input {
+    flex: 1;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    margin-left: 18px;
+}

@@ -65,6 +65,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
+    <link rel="stylesheet" href="form.css">
     <script src="postalcodesearch.js"></script>
     <script src="contact.js"></script>
 </head>
@@ -206,6 +207,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         name="email"
                         placeholder="例）guest@example.com"
                         value="<?= htmlspecialchars($_POST['email']) ?>">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id'] ?? '') ?>">
                     <?php if (isset($error_message['email'])) : ?>
                         <div class="error-msg">
                             <?= htmlspecialchars($error_message['email']) ?></div>
