@@ -90,98 +90,99 @@ function validatePasswordField() {
     } else if (val.length > 64) {
         errorElement(field, "8文字以上64文字以下で入力してください");
     }
+}
 
-    function validatePassword2Field() {
-        const field = document.edit.password2;
-        clearFieldError(field);
-        const val = field.value;
-        if (val === "") {
-            errorElement(field, "確認用パスワードが入力されていません");
-        } else if (val.trim() === "") {
-            errorElement(field, "スペースのみでは入力できません");
-        } else if (val !== document.edit.password.value) {
-            errorElement(field, "パスワードが一致しません");
+function validatePassword2Field() {
+    const field = document.edit.password2;
+    clearFieldError(field);
+    const val = field.value;
+    if (val === "") {
+        errorElement(field, "確認用パスワードが入力されていません");
+    } else if (val.trim() === "") {
+        errorElement(field, "スペースのみでは入力できません");
+    } else if (val !== document.edit.password.value) {
+        errorElement(field, "パスワードが一致しません");
+    }
+}
+
+function validateFileField(input, label) {
+    clearFieldError(input);
+    const file = input.files[0];
+    if (!file) return;
+    const allowed = ['jpg', 'jpeg', 'png'];
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!allowed.includes(ext)) {
+        errorElement(input, `ファイル形式は PNG または JPEG のみ許可されています`);
+    }
+}
+
+function clearFieldError(field) {
+    if (field.name === "postal_code") {
+        const placeholder = document.querySelector(".postal-error-placeholder");
+        if (placeholder) placeholder.innerHTML = "";
+        const serverError = document.querySelector(".error-msg2");
+        if (serverError && serverError.textContent.includes("郵便番号")) serverError.remove();
+    }
+
+    let next = field.nextSibling;
+    while (next) {
+        if (next.nodeType === 1 && next.classList.contains("error-msg")) {
+            let toRemove = next;
+            next = next.nextSibling;
+            toRemove.remove();
+        } else {
+            break;
         }
     }
 
-    function validateFileField(input, label) {
-        clearFieldError(input);
-        const file = input.files[0];
-        if (!file) return;
-        const allowed = ['jpg', 'jpeg', 'png'];
-        const ext = file.name.split('.').pop().toLowerCase();
-        if (!allowed.includes(ext)) {
-            errorElement(input, `ファイル形式は PNG または JPEG のみ許可されています`);
+    const parent = field.closest("div") || field.parentNode;
+    const serverErrors = parent.querySelectorAll(".error-msg, .error-msg2");
+    serverErrors.forEach(el => el.remove());
+
+    field.classList.remove("error-form");
+}
+
+function errorElement(field, msg) {
+    field.classList.add("error-form");
+    const e = document.createElement("div");
+    e.className = "error-msg";
+    e.textContent = msg;
+    if (field.name === "postal_code") {
+        const placeholder = document.querySelector(".postal-error-placeholder");
+        if (placeholder) {
+            placeholder.innerHTML = "";
+            placeholder.appendChild(e);
+            return;
         }
     }
+    field.parentNode.insertBefore(e, field.nextSibling);
+}
 
-    function clearFieldError(field) {
-        if (field.name === "postal_code") {
-            const placeholder = document.querySelector(".postal-error-placeholder");
-            if (placeholder) placeholder.innerHTML = "";
-            const serverError = document.querySelector(".error-msg2");
-            if (serverError && serverError.textContent.includes("郵便番号")) serverError.remove();
-        }
+// 各種バリデーション関数
+function validateMail(val) {
+    return /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+\\.[A-Za-z0-9]+$/.test(val);
+}
+function validateTel(val) {
+    return /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/.test(val);
+}
+function validateKana(val) {
+    return /^[ぁ-んー\\s　]+$/.test(val);
+}
+function validatePostalCode(val) {
+    return /^[0-9]{3}-?[0-9]{4}$/.test(val);
+}
 
-        let next = field.nextSibling;
-        while (next) {
-            if (next.nodeType === 1 && next.classList.contains("error-msg")) {
-                let toRemove = next;
-                next = next.nextSibling;
-                toRemove.remove();
-            } else {
-                break;
-            }
-        }
+function validateAllFields() {
+    // 全フィールドを検証
+    validateNameField();
+    validateKanaField();
+    validateEmailField();
+    validateTelField();
+    validatePostalCodeField();
+    validatePasswordField();
+    validatePassword2Field();
 
-        const parent = field.closest("div") || field.parentNode;
-        const serverErrors = parent.querySelectorAll(".error-msg, .error-msg2");
-        serverErrors.forEach(el => el.remove());
-
-        field.classList.remove("error-form");
-    }
-
-    function errorElement(field, msg) {
-        field.classList.add("error-form");
-        const e = document.createElement("div");
-        e.className = "error-msg";
-        e.textContent = msg;
-        if (field.name === "postal_code") {
-            const placeholder = document.querySelector(".postal-error-placeholder");
-            if (placeholder) {
-                placeholder.innerHTML = "";
-                placeholder.appendChild(e);
-                return;
-            }
-        }
-        field.parentNode.insertBefore(e, field.nextSibling);
-    }
-
-    // 各種バリデーション関数
-    function validateMail(val) {
-        return /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+\\.[A-Za-z0-9]+$/.test(val);
-    }
-    function validateTel(val) {
-        return /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/.test(val);
-    }
-    function validateKana(val) {
-        return /^[ぁ-んー\\s　]+$/.test(val);
-    }
-    function validatePostalCode(val) {
-        return /^[0-9]{3}-?[0-9]{4}$/.test(val);
-    }
-
-    function validateAllFields() {
-        // 全フィールドを検証
-        validateNameField();
-        validateKanaField();
-        validateEmailField();
-        validateTelField();
-        validatePostalCodeField();
-        validatePasswordField();
-        validatePassword2Field();
-
-        // エラーが一つでもあるなら送信を止める
-        const errors = document.querySelectorAll('.error-msg');
-        return errors.length === 0;
-    }
+    // エラーが一つでもあるなら送信を止める
+    const errors = document.querySelectorAll('.error-msg');
+    return errors.length === 0;
+}
