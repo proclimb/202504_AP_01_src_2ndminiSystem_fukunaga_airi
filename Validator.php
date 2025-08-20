@@ -81,39 +81,17 @@ class Validator
             $this->error_message['email'] = 'メールアドレスが入力されていません';
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error_message['email'] = '有効なメールアドレスを入力してください';
-        } else {
-            if (!empty($data['id'])) {
-                // 編集時：自分のIDは除外する
-                $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM user_base WHERE email = :email AND id != :id');
-                $stmt->execute([
-                    ':email' => $data['email'],
-                    ':id' => $data['id']
-                ]);
-            } else {
-                // 新規登録時
-                $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM user_base WHERE email = :email');
-                $stmt->execute([':email' => $data['email']]);
-            }
-
-            if ($stmt->fetchColumn() > 0) {
-                $this->error_message['email'] = "このメールアドレスは既に登録されています";
-            }
         }
-        // パスワード
-     if(empty($data['password'])){
-        $this-> error_message['password'] ="パスワードが入力されていません";
-     } else if (strlen(($data['password'])< 8 || strlen(($data['password'])< )))
-
 
         // 郵便番号と住所の整合性チェック
         if (!empty($data['postal_code']) && !empty($data['prefecture']) && !empty($data['city_town'])) {
             try {
-                $sql = "SELECT COUNT(*) FROM address_master WHERE REPLACE(postal_code, '-', '') = :postal_code AND prefecture = :prefecture AND city LIKE :city_town";
+                $sql = "SELECT COUNT(*) FROM address_master WHERE postal_code = :postal_code AND prefecture = :prefecture AND city = :city_town";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
                     ':postal_code' => preg_replace('/[^0-9]/', '', $data['postal_code']),
                     ':prefecture' => preg_replace('/\s/u', '', mb_convert_kana($data['prefecture'], 'ASKV')),
-                    ':city_town' => preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV')) . '%',
+                    ':city_town' => preg_replace('/\s/u', '', mb_convert_kana($data['city_town'], 'ASKV')),
                 ]);
                 $count = $stmt->fetchColumn();
                 if ($count == 0) {

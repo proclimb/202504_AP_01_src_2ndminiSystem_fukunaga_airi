@@ -44,8 +44,7 @@ $_POST = $user->findById($id);
                         id="password"
                         placeholder="ここにパスワードを打ち込んでください">
                     <label class="show-pw">
-                        <input type="checkbox" id="togglePwText"
-                            class="togglePwText">表示
+                        <input type="checkbox" id="togglePw"> 表示
                     </label>
                 </div>
                 <?php if (isset($error_message['password'])) : ?>

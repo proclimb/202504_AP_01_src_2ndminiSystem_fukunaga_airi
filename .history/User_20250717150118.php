@@ -105,13 +105,6 @@ class User
         return $stmt->execute([':id' => $id]);
     }
 
-    public function findByEmail($email)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
 
 
     // ユーザ検索(キーワード検索、全件検索)

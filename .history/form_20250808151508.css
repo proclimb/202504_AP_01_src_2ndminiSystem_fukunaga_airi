@@ -452,25 +452,3 @@ label span {
     word-break: normal;
     color: red;
 }
-
-/* ─────────────────────────────────────
-/* ────────────────────────
-   全フォーム行を縦積みに
-──────────────────────────────── */
-.form-block {
-    display: flex;
-    flex-direction: column;
-}
-
-/* ────────────────────────
-   入力欄の直後にあるエラー文を
-   ラベル幅（150px）下から横一列に
-──────────────────────────────── */
-.form-block>.error-msg {
-    display: block;
-    margin: 6px 0 0 150px;
-    width: calc(100% - 150px);
-    white-space: normal;
-    word-break: normal;
-    color: red;
-}

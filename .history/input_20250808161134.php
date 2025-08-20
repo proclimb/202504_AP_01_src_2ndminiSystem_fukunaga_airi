@@ -116,10 +116,81 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
             color: red !important;
         }
 
-        input[name="tel"]+.error-msg {
-            color: red;
-            text-align: center !important;
+        .form-block {
+            display: grid !important;
+            grid-template-columns: 150px 1fr;
+            /* ラベル幅150px + 残り1fr */
+            grid-template-rows: auto auto;
+            /* 上段：入力、下段：エラー */
+            column-gap: 6px;
+            /* ラベルと入力の間隔 */
+            row-gap: 6px;
+            /* 入力とエラーの間隔 */
+            align-items: center;
+            /* 上段の縦位置を中央揃え */
+        }
 
+        /* ラベルを左列・上段に */
+        .form-block>label {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        /* 入力欄（input, .pw-wrapper, .postal-row, select など）は右列・上段に */
+        .form-block>input,
+        .form-block>.pw-wrapper,
+        .form-block>.postal-row,
+        .form-block>select,
+        .form-block>textarea {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        /* エラー文は右列・下段に */
+        .form-block>.error-msg,
+        .form-block>.error-msg2 {
+            grid-column: 2;
+            grid-row: 2;
+            /* さらに幅いっぱいに */
+            width: 100%;
+            white-space: normal;
+            word-break: break-word;
+            color: red;
+        }
+
+        .postal-row+.postal-error-placeholder .error-msg2 {
+            display: block !important;
+            /* ブロック表示に戻す */
+            margin: 6px 0 0 150px !important;
+            /* ラベル幅(150px)分オフセット */
+            width: calc(100% - 150px) !important;
+            /* 入力欄幅に合わせる */
+            white-space: normal !important;
+            /* 折り返し許可 */
+            word-break: break-word !important;
+            /* 単語内改行を防止 */
+            color: red !important;
+            /* 赤文字 */
+        }
+
+        .postal-error-placeholder {
+            display: block !important;
+            /* ブロック表示 */
+            margin: 6px 0 0 150px !important;
+            /* 上6px、左150px（ラベル幅）分オフセット */
+            width: calc(100% - 150px) !important;
+            /* 入力欄と同じ幅 */
+            clear: both !important;
+            /* float/flex の行をクリア */
+        }
+
+        .postal-error-placeholder .error-msg2 {
+            display: block !important;
+            white-space: normal !important;
+            /* 折り返し許可 */
+            word-break: break-word !important;
+            /* 語中改行を防止 */
+            color: red !important;
         }
     </style>
 

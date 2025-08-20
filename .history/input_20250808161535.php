@@ -84,42 +84,68 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     <link rel="stylesheet" href="form.css">
     <script src="contact.js"></script>
     <style>
+        /* ─────────────────────────────────────────
+   1) form-block を 2 列×2 行の Grid に
+────────────────────────────────────────── */
+        .form-block {
+            display: grid !important;
+            grid-template-columns: 150px 1fr;
+            grid-template-rows: auto auto;
+            column-gap: 6px;
+            row-gap: 4px;
+            align-items: start;
+        }
+
+        /* ラベル */
+        .form-block>label {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        /* 入力系要素 */
+        .form-block>input,
+        .form-block>select,
+        .form-block>textarea,
+        .form-block>.postal-row,
+        .form-block>.pw-wrapper {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        /* エラー文 */
+        .form-block>.error-msg,
+        .form-block>.error-msg2,
+        .form-block>.postal-error-placeholder {
+            grid-column: 2;
+            grid-row: 2;
+            display: block;
+            width: 100%;
+            color: red;
+            white-space: normal;
+            word-break: break-word;
+            margin: 0;
+            /* row-gap で上下間隔を制御 */
+        }
+
+        /* ─────────────────────────────────────────
+   2) pw-wrapper 内は横並び（ネストした Flex）
+────────────────────────────────────────── */
         .pw-wrapper {
             display: flex !important;
-            flex-wrap: wrap !important;
-            /* 折り返しON */
             align-items: center !important;
             gap: 6px !important;
         }
 
+        /* 「表示」ボタンは縮まない */
+        .pw-wrapper .toggle-pw-text,
+        .pw-wrapper .togglePwText {
+            flex-shrink: 0 !important;
+        }
+
+        /* パスワード入力だけ残り幅を占有 */
         .pw-wrapper .password-input {
             flex: 1 1 auto !important;
-            /* 残り幅を占有 */
             min-width: 0 !important;
-        }
-
-        .pw-wrapper .toggle-pw-text {
-            flex-shrink: 0 !important;
-            /* ボタンは縮まない */
-        }
-
-        .pw-wrapper .error-msg {
-            order: 1 !important;
-            /* 要素を最後尾に */
-            flex-basis: 100% !important;
-            /* 折り返して次行を丸ごと使う */
-            margin: 6px 0 0 0 !important;
-            /* 上だけ隙間 */
-            white-space: normal !important;
-            /* 折り返し許可 */
-            word-break: normal !important;
-            color: red !important;
-        }
-
-        input[name="tel"]+.error-msg {
-            color: red;
-            text-align: center !important;
-
         }
     </style>
 

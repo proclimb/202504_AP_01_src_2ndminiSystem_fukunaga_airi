@@ -118,8 +118,12 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 
         input[name="tel"]+.error-msg {
             color: red;
-            text-align: center !important;
-
+            margin-left: 120px;
+            /* ラベルの幅に合わせて調整 */
+            margin-top: 6px;
+            display: block;
+            white-space: normal;
+            word-break: break-word;
         }
     </style>
 

@@ -119,7 +119,7 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
         input[name="tel"]+.error-msg {
             color: red;
             text-align: center !important;
-
+            margin-right: 20px !important;
         }
     </style>
 

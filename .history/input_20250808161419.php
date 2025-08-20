@@ -84,42 +84,52 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
     <link rel="stylesheet" href="form.css">
     <script src="contact.js"></script>
     <style>
-        .pw-wrapper {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            /* 折り返しON */
-            align-items: center !important;
-            gap: 6px !important;
+        /* ─────────────────────────────────────────
+     全 .form-block を 2 列×2 行の Grid に
+  ────────────────────────────────────────── */
+        .form-block {
+            display: grid !important;
+            grid-template-columns: 150px 1fr;
+            /* 左列：ラベル幅150px、右列：入力＆エラー */
+            grid-template-rows: auto auto;
+            /* 上段：入力／下段：エラー */
+            column-gap: 6px;
+            /* ラベルと入力の間隔 */
+            row-gap: 4px;
+            /* 入力とエラーの間隔 */
+            align-items: start;
+            /* 上段は上揃え */
         }
 
-        .pw-wrapper .password-input {
-            flex: 1 1 auto !important;
-            /* 残り幅を占有 */
-            min-width: 0 !important;
+        /* ラベルを左上セルに */
+        .form-block>label {
+            grid-column: 1;
+            grid-row: 1;
         }
 
-        .pw-wrapper .toggle-pw-text {
-            flex-shrink: 0 !important;
-            /* ボタンは縮まない */
+        /* 入力要素を右上セルに */
+        .form-block>input,
+        .form-block>select,
+        .form-block>textarea,
+        .form-block>.pw-wrapper,
+        .form-block>.postal-row {
+            grid-column: 2;
+            grid-row: 1;
         }
 
-        .pw-wrapper .error-msg {
-            order: 1 !important;
-            /* 要素を最後尾に */
-            flex-basis: 100% !important;
-            /* 折り返して次行を丸ごと使う */
-            margin: 6px 0 0 0 !important;
-            /* 上だけ隙間 */
-            white-space: normal !important;
-            /* 折り返し許可 */
-            word-break: normal !important;
-            color: red !important;
-        }
-
-        input[name="tel"]+.error-msg {
+        /* エラー文を右下セルに */
+        .form-block>.error-msg,
+        .form-block>.error-msg2,
+        .form-block>.postal-error-placeholder {
+            grid-column: 2;
+            grid-row: 2;
+            display: block;
+            width: 100%;
             color: red;
-            text-align: center !important;
-
+            white-space: normal;
+            word-break: break-word;
+            margin: 0;
+            /* row-gap で間隔を制御 */
         }
     </style>
 

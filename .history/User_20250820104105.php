@@ -105,11 +105,10 @@ class User
         return $stmt->execute([':id' => $id]);
     }
 
-    public function findByEmail($email)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    public function findByEmail($email){
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?")
+   $stmt->execurte([$email]);
+   return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 

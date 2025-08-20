@@ -454,19 +454,29 @@ label span {
 }
 
 /* ─────────────────────────────────────
-/* ────────────────────────
-   全フォーム行を縦積みに
-──────────────────────────────── */
-.form-block {
-    display: flex;
-    flex-direction: column;
+   全ての form-block に共通：入力＋エラーの並びを揃える
+───────────────────────────────────── */
+.form-block>input+.error-msg,
+.form-block>input+.error-msg2,
+.form-block>.postal-row+.error-msg2,
+.form-block>select+.error-msg2,
+.form-block>textarea+.error-msg2 {
+    display: block;
+    /* ブロック要素にする */
+    margin: 6px 0 0 150px;
+    /* 上6px、左150px (labelと同じオフセット) */
+    width: calc(100% - 150px);
+    /* 入力幅に合わせる */
+    white-space: normal;
+    /* 折り返し許可 */
+    word-break: normal;
+    /* 一文字縦割りを防止 */
+    color: red;
+    /* エラーカラー */
 }
 
-/* ────────────────────────
-   入力欄の直後にあるエラー文を
-   ラベル幅（150px）下から横一列に
-──────────────────────────────── */
-.form-block>.error-msg {
+/* もし .error-msg だけでよければ、下記1行でOK */
+.form-block>*+.error-msg {
     display: block;
     margin: 6px 0 0 150px;
     width: calc(100% - 150px);
