@@ -63,7 +63,7 @@
             margin: 30px 0;
         }
 
-        .item a {
+        .item button {
             background: none;
             border: none;
             color: #fff;
@@ -72,10 +72,9 @@
             position: relative;
             padding: 8px 0;
             cursor: pointer;
-            text-decoration: none;
         }
 
-        .item a::after {
+        .item button::after {
             content: '';
             position: absolute;
             left: 0;
@@ -86,7 +85,7 @@
             transition: width .4s ease;
         }
 
-        .item a:hover::after {
+        .item button:hover::after {
             width: 100%;
         }
 
@@ -188,21 +187,24 @@
     <!-- ボタン -->
     <div class="container">
         <div class="item">
-            <a href="input.php">登録画面</a>
+            <form action="input.php" method="post">
+                <button type="submit">登録画面</button>
+            </form>
         </div>
-
         <div class="item">
-            <a href="dashboard.php">ダッシュボード</a>
+            <form action="dashboard.php" method="post">
+                <button type="submit">ダッシュボード</button>
+            </form>
         </div>
-
-
         <div class="item">
-            <a href="Csvpreview.php">住所マスタ更新</a>
+            <form action="Csvpreview.php" method="post">
+                <button type="submit">住所マスタ更新</button>
+            </form>
         </div>
-
-
         <div class="item">
-            <a href="login.php">ログイン</a>
+            <form action="login.php" method="post">
+                <button type="submit">ログイン</button>
+            </form>
         </div>
     </div>
 

@@ -72,7 +72,6 @@
             position: relative;
             padding: 8px 0;
             cursor: pointer;
-            text-decoration: none;
         }
 
         .item a::after {

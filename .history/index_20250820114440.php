@@ -59,7 +59,7 @@
             text-align: center;
         }
 
-        .item {
+        .item a {
             margin: 30px 0;
         }
 
@@ -72,7 +72,6 @@
             position: relative;
             padding: 8px 0;
             cursor: pointer;
-            text-decoration: none;
         }
 
         .item a::after {
@@ -190,20 +189,20 @@
         <div class="item">
             <a href="input.php">登録画面</a>
         </div>
-
-        <div class="item">
-            <a href="dashboard.php">ダッシュボード</a>
-        </div>
-
-
-        <div class="item">
-            <a href="Csvpreview.php">住所マスタ更新</a>
-        </div>
-
-
-        <div class="item">
-            <a href="login.php">ログイン</a>
-        </div>
+    </div>
+    <div class="item">
+        <a href="dashboard.php">ダッシュボード</a>
+    </div>
+    </form>
+    </div>
+    <div class="item">
+        <a href="Csvpreview.php">住所マスタ更新</a>
+    </div>
+    </form>
+    </div>
+    <div class="item">
+        <a href="login.php">ログイン</a>
+    </div>
     </div>
 
 

@@ -72,7 +72,6 @@
             position: relative;
             padding: 8px 0;
             cursor: pointer;
-            text-decoration: none;
         }
 
         .item a::after {
@@ -204,7 +203,7 @@
         <div class="item">
             <a href="login.php">ログイン</a>
         </div>
-    </div>
+
 
 
 

@@ -4,10 +4,7 @@
 require_once 'Db.php';
 require_once 'User.php';
 session_start();
-
-$old_email = $_SESSION['old_email'] ?? '';
-unset($_SESSION['old_email']);
-
+$error_message = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -17,9 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = $user->findByEmail($email);
 
     if (!$data || !password_verify($password, $data['password'])) {
-        $_SESSION['old_email'] = $email;
-        $_SESSION['error_message'] = 'メールアドレスまたはパスワードが正しくありません';
-        header("Location: login.php");
+        $error_message['password'] = 'メールアドレスまたはパスワードが正しくありません';
+    } else {
+        $_SESSION['user_id'] = $data['id'];
+        header("Location: dashboard.php");
         exit;
     }
 }
@@ -49,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="email"
                     id="email"
                     name="email"
-                    value="<?= htmlspecialchars($old_email, ENT_QUOTES) ?>" required>
+                    value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES) ?>"
+                    required>
             </div>
 
             <div class="form-block">
@@ -65,9 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="togglePwText">表示
                     </label>
                 </div>
-                <?php if (!empty($_SESSION['error_message'])): ?>
-                    <div class="error-msg"><?= htmlspecialchars($_SESSION['error_message']) ?></div>
-                    <?php unset($_SESSION['error_message']); ?>
+                <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($error_message['password'])) : ?>
+                    <div class="error-msg"><?= htmlspecialchars($error_message['password']) ?></div>
                 <?php endif ?>
             </div>
 

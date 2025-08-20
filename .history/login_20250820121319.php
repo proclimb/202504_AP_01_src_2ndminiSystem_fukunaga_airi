@@ -5,9 +5,6 @@ require_once 'Db.php';
 require_once 'User.php';
 session_start();
 
-$old_email = $_SESSION['old_email'] ?? '';
-unset($_SESSION['old_email']);
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
