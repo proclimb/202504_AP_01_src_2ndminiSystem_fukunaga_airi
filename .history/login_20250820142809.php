@@ -16,17 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = new User($pdo);
     $data = $user->findByEmail($email);
 
-
-
-
-
-    if (!$data || !password_verify($password, $data['password_hash'])) {
+    if (!$data || !password_verify($password, $data['password'])) {
         $_SESSION['old_email'] = $email;
         $_SESSION['error_message'] = 'メールアドレスまたはパスワードが正しくありません';
         header("Location: login.php");
         exit;
     } else {
-        echo "ログイン成功！";
+        var_dump($data);  // ここでユーザー情報がちゃんと出てるか確認
+var_dump($password);
+var_dump($data['password']);
+var_dump(password_verify($password, $data['password']));
+exit
     }
 }
 ?>

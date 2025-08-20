@@ -124,15 +124,6 @@ function clearFieldError(field) {
         if (serverError && serverError.textContent.includes("郵便番号")) serverError.remove();
     }
 
-    // ★ ここを追加する
-    if (field.name === "email") {
-        const serverError = document.querySelector(".error-msg2");
-        if (serverError && serverError.textContent.includes("メールアドレス")) {
-            serverError.remove();
-        }
-    }
-
-    // クライアント側のエラーだけ削除
     let next = field.nextSibling;
     while (next) {
         if (next.nodeType === 1 && next.classList.contains("error-msg")) {
@@ -144,9 +135,12 @@ function clearFieldError(field) {
         }
     }
 
+    const parent = field.closest("div") || field.parentNode;
+    const serverErrors = parent.querySelectorAll(".error-msg, .error-msg2");
+    serverErrors.forEach(el => el.remove());
+
     field.classList.remove("error-form");
 }
-
 
 function errorElement(field, msg) {
     field.classList.add("error-form");
@@ -166,7 +160,7 @@ function errorElement(field, msg) {
 
 // 各種バリデーション関数
 function validateMail(val) {
-    return /^[A-Za-z0-9_.-]+@[A-Za-z0-9_.-]+\.[A-Za-z0-9]+$/.test(val);
+    return /^[A-Za-z0-9][A-Za-z0-9_.-]*@[A-Za-z0-9_.-]+\.[A-Za-z0-9]+$/.test(val);
 }
 function validateTel(val) {
     return /^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/.test(val);
@@ -176,4 +170,19 @@ function validateKana(val) {
 }
 function validatePostalCode(val) {
     return /^[0-9]{3}-?[0-9]{4}$/.test(val);
+}
+
+function validateAllFields() {
+    // 全フィールドを検証
+    validateNameField();
+    validateKanaField();
+    validateEmailField();
+    validateTelField();
+    validatePostalCodeField();
+    validatePasswordField();
+    validatePassword2Field();
+
+    // エラーが一つでもあるなら送信を止める
+    const errors = document.querySelectorAll('.error-msg');
+    return errors.length === 0;
 }

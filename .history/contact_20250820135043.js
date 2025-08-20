@@ -124,15 +124,7 @@ function clearFieldError(field) {
         if (serverError && serverError.textContent.includes("郵便番号")) serverError.remove();
     }
 
-    // ★ ここを追加する
-    if (field.name === "email") {
-        const serverError = document.querySelector(".error-msg2");
-        if (serverError && serverError.textContent.includes("メールアドレス")) {
-            serverError.remove();
-        }
-    }
-
-    // クライアント側のエラーだけ削除
+    // クライアント側のエラーだけ削除する
     let next = field.nextSibling;
     while (next) {
         if (next.nodeType === 1 && next.classList.contains("error-msg")) {
@@ -146,7 +138,6 @@ function clearFieldError(field) {
 
     field.classList.remove("error-form");
 }
-
 
 function errorElement(field, msg) {
     field.classList.add("error-form");
@@ -176,4 +167,19 @@ function validateKana(val) {
 }
 function validatePostalCode(val) {
     return /^[0-9]{3}-?[0-9]{4}$/.test(val);
+}
+
+function validateAllFields() {
+    // 全フィールドを検証
+    validateNameField();
+    validateKanaField();
+    validateEmailField();
+    validateTelField();
+    validatePostalCodeField();
+    validatePasswordField();
+    validatePassword2Field();
+
+    const errors = document.querySelectorAll('.error-msg');
+    console.log("エラー数:", errors.length);
+    return errors.length === 0;
 }

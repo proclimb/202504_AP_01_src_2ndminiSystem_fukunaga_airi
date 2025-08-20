@@ -16,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = new User($pdo);
     $data = $user->findByEmail($email);
 
-
+    if ($data) {
+        var_dump($password);                // 入力パスワード
+        var_dump($data['password_hash']);   // DBのハッシュ
+        var_dump(password_verify($password, $data['password_hash'])); // true/false
+        exit;
+    }
 
 
 

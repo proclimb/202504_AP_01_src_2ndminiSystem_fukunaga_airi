@@ -31,7 +31,7 @@ class User
                     :birth_date,
                     :tel,
                     :email,
-                    :password_hash,
+                    password_hash,
                     now()
                     )";
         $stmt = $this->pdo->prepare($sql);
@@ -41,8 +41,7 @@ class User
             ':gender_flag'  => $data['gender_flag'],
             ':birth_date'   => $data['birth_date'],
             ':tel'          => $data['tel'],
-            ':email'        => $data['email'],
-            ':password_hash' => $data['password_hash'],
+            ':email'        => $data['email']
         ]);
         return $this->pdo->lastInsertId();
     }
@@ -109,7 +108,6 @@ class User
     }
 
     public function findByEmail($email)
-
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_base WHERE email = ?");
         $stmt->execute([$email]);

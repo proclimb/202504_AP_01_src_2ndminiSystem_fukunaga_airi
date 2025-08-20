@@ -109,7 +109,6 @@ class User
     }
 
     public function findByEmail($email)
-
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_base WHERE email = ?");
         $stmt->execute([$email]);

@@ -51,7 +51,7 @@ if (!isset($old['gender'])) {
     $old['gender'] = '1';
 }
 
-// 3.入力項目の入力チェック
+// 3.入力項目の入力チェックs
 if (!empty($_POST) && empty($_SESSION['input_data'])) {
     $validator = new Validator($pdo);
     if ($validator->validate($_POST)) {
@@ -353,25 +353,25 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 
             <!-- ↑ ここまでが “白パネル内” -->
 
-    </div>
-    <!-- ★ パネル外に出したボタン群 ★ -->
-    <div class="btn-group outside-panel">
-        <button type="submit" form="edit-form" class="flip-button">
-            <div class="inner">
-                <div class="face front">確認画面へ</div>
-                <div class="face back"></div>
-            </div>
-        </button>
 
-        <a href="index.php">
-            <button type="button" class="flip-button flip-button-home">
-                <div class="inner">
-                    <div class="face front">TOPに戻る</div>
-                    <div class="face back"></div>
-                </div>
-            </button>
-        </a>
-    </div>
+            <!-- ★ パネル外に出したボタン群 ★ -->
+            <div class="btn-group outside-panel">
+                <button type="submit" form="edit-form" class="flip-button">
+                    <div class="inner">
+                        <div class="face front">確認画面へ</div>
+                        <div class="face back"></div>
+                    </div>
+                </button>
+
+                <a href="index.php">
+                    <button type="button" class="flip-button flip-button-home">
+                        <div class="inner">
+                            <div class="face front">TOPに戻る</div>
+                            <div class="face back"></div>
+                        </div>
+                    </button>
+                </a>
+            </div>
     </div>
     </form>
     <script src="pass.js" defer></script>

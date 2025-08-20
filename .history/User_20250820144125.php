@@ -110,6 +110,12 @@ class User
 
     public function findByEmail($email)
 
+    if ($data) {
+    var_dump($password);                // 入力パスワード
+    var_dump($data['password_hash']);   // DBのハッシュ
+    var_dump(password_verify($password, $data['password_hash'])); // true/false
+    exit;
+}
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_base WHERE email = ?");
         $stmt->execute([$email]);

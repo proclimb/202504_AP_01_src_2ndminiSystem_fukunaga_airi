@@ -46,7 +46,8 @@ session_destroy();
                     'city_town',
                     'building',
                     'tel',
-                    'email'
+                    'email',
+                    'password_hash'
                 ] as $key
             ): ?>
                 <input type="hidden" name="<?= $key ?>" value="<?= htmlspecialchars($_POST[$key]) ?>">
@@ -84,8 +85,8 @@ session_destroy();
                 <div><label>メールアドレス</label>
                     <p><?= htmlspecialchars($_POST['email']) ?></p>
                 </div>
-                <div>
-                    <p><input type="hidden" name="password_hash" value="<?= htmlspecialchars($hashedPassword) ?>"></p>
+                <div><label>パスワード</label>
+                    <p><?= htmlspecialchars($hashedPassword) ?></p>
                 </div>
             </div>
 

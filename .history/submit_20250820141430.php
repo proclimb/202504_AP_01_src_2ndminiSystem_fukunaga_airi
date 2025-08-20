@@ -54,7 +54,7 @@ try {
         'birth_date' => $birth_date,
         'tel' => $_POST['tel'],
         'email' => $_POST['email'],
-        'password_hash' => $_POST['password_hash']
+        'password_hash' => password_hash($_POST['password'], PASSWORD_DEFAULT)
     ]);
 } catch (PDOException $e) {
     if ($e->getCode() == 23000) {

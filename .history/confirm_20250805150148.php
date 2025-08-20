@@ -7,7 +7,6 @@ if (!isset($_SESSION['input_data'])) {
     exit();
 }
 $_POST = $_SESSION['input_data'];
-$hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 session_destroy();
 ?>
 <!DOCTYPE html>
@@ -83,9 +82,6 @@ session_destroy();
                 </div>
                 <div><label>メールアドレス</label>
                     <p><?= htmlspecialchars($_POST['email']) ?></p>
-                </div>
-                <div>
-                    <p><input type="hidden" name="password_hash" value="<?= htmlspecialchars($hashedPassword) ?>"></p>
                 </div>
             </div>
 

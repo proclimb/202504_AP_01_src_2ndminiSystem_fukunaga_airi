@@ -333,8 +333,9 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                         <?php if (isset($error_message['password'])) : ?>
 
                             <?= htmlspecialchars($error_message['password']) ?>
+
+                        <?php endif ?>
                     </div>
-                <?php endif ?>
                 </div>
 
                 <!-- ２行目も同じ構造に -->
@@ -353,25 +354,25 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 
             <!-- ↑ ここまでが “白パネル内” -->
 
-    </div>
-    <!-- ★ パネル外に出したボタン群 ★ -->
-    <div class="btn-group outside-panel">
-        <button type="submit" form="edit-form" class="flip-button">
-            <div class="inner">
-                <div class="face front">確認画面へ</div>
-                <div class="face back"></div>
-            </div>
-        </button>
 
-        <a href="index.php">
-            <button type="button" class="flip-button flip-button-home">
-                <div class="inner">
-                    <div class="face front">TOPに戻る</div>
-                    <div class="face back"></div>
-                </div>
-            </button>
-        </a>
-    </div>
+            <!-- ★ パネル外に出したボタン群 ★ -->
+            <div class="btn-group outside-panel">
+                <button type="submit" form="edit-form" class="flip-button">
+                    <div class="inner">
+                        <div class="face front">確認画面へ</div>
+                        <div class="face back"></div>
+                    </div>
+                </button>
+
+                <a href="index.php">
+                    <button type="button" class="flip-button flip-button-home">
+                        <div class="inner">
+                            <div class="face front">TOPに戻る</div>
+                            <div class="face back"></div>
+                        </div>
+                    </button>
+                </a>
+            </div>
     </div>
     </form>
     <script src="pass.js" defer></script>

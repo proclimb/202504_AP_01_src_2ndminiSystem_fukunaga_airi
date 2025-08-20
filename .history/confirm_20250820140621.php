@@ -46,7 +46,8 @@ session_destroy();
                     'city_town',
                     'building',
                     'tel',
-                    'email'
+                    'email',
+                    'password_hash'
                 ] as $key
             ): ?>
                 <input type="hidden" name="<?= $key ?>" value="<?= htmlspecialchars($_POST[$key]) ?>">

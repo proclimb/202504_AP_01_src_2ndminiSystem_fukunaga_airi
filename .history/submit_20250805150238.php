@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $building = $_POST['building'];
     $tel = $_POST['tel'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
 }
 
 //DBへの格納する値の形成
@@ -53,8 +52,7 @@ try {
         'gender_flag' => $_POST['gender'],
         'birth_date' => $birth_date,
         'tel' => $_POST['tel'],
-        'email' => $_POST['email'],
-        'password_hash' => $_POST['password_hash']
+        'email' => $_POST['email']
     ]);
 } catch (PDOException $e) {
     if ($e->getCode() == 23000) {
