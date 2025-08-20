@@ -1,8 +1,5 @@
 <?php
 // PHP 部分はそのまま
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once 'Db.php';
 require_once 'User.php';
 session_start();

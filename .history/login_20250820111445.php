@@ -1,21 +1,18 @@
 <?php
 // PHP 部分はそのまま
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once 'Db.php';
 require_once 'User.php';
 session_start();
 $error_message = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
     $user = new User($pdo);
     $data = $user->findByEmail($email);
 
-    if (!$data || !password_verify($password, $data['password'])) {
+    if (!$data || !password_verify($password,$data['password'])){
         $error_message['password'] = 'メールアドレスまたはパスワードが正しくありません';
     } else {
         $_SESSION['user_id'] = $data['id'];
@@ -23,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-?>
 <!DOCTYPE html>
 <html lang="ja">
 
