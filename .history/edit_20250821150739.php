@@ -21,15 +21,13 @@ if (empty($_SESSION['role'])) {
     exit;
 }
 
-$isAdmin = (($_SESSION['role'] ?? '') === 'admin');
-
 $pdo  = $pdo ?? Db::getConnection(); // Db.php の実装に合わせて適宜
 $user = new User($pdo);
 
 $error_message = [];
 
 // --- 1) 編集対象IDの決定 ---
-if ($isAdmin && isset($_GET['id'])) {
+if (($_SESSION['role'] ?? '') === 'admin' && isset($_GET['id'])) {
     // 管理者は ?id= で任意ユーザ
     $targetId = (int)$_GET['id'];
 } else {
@@ -41,7 +39,7 @@ if ($isAdmin && isset($_GET['id'])) {
     }
 }
 
-
+$isAdmin = (($_SESSION['role'] ?? '') === 'admin');
 
 // --- 2) 対象ユーザー取得 ---
 $userData = $user->findById($targetId);
@@ -273,12 +271,14 @@ $_POST = $form;
             </div>
             <div class="btn-group">
                 <!-- 更新ボタン（edit-form の中に入れる場合） -->
-                <form id="edit-form" action="edit.php" method="post" enctype="multipart/form-data" onsubmit="return validate();">
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id'], ENT_QUOTES) ?>">
-                    <!-- …各入力フィールド… -->
+                <form id="edit-form" action="edit.php" method="post" enctype="multipart/form-data" onsubmit="return validate();" name="edit">
+                    <!-- hidden の前後空白を除去しエスケープ -->
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id'] ?? '', ENT_QUOTES) ?>">
+
+                    <!-- …入力フィールド群はそのまま… -->
 
                     <div class="btn-group">
-                        <!-- 更新ボタン：デフォルトの action="edit.php" -->
+                        <!-- 更新ボタン -->
                         <button type="submit" class="flip-button">
                             <div class="inner">
                                 <div class="face front">更新</div>
@@ -286,23 +286,22 @@ $_POST = $form;
                             </div>
                         </button>
 
-                        <!-- 削除ボタン：クリック時だけ action="delete.php" に上書き -->
+                        <!-- 削除ボタン -->
                         <button
                             type="submit"
                             class="flip-button flip-button-delete"
                             formaction="delete.php"
-                            formmethod="post" onclick="return confirm('本当に削除しますか？');">
+                            formmethod="post"
+                            onclick="return confirm('本当に削除しますか？');">
                             <div class="inner">
                                 <div class="face front">削除</div>
                                 <div class="face back"></div>
                             </div>
                         </button>
-                        <!-- マスタだけに表示 -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                            <button
-                                type="button"
-                                class="flip-button flip-button-back"
-                                onclick="location.href='dashboard.php'">
+
+                        <!-- 管理者のみ：ダッシュボードに戻る -->
+                        <?php if ($isAdmin): ?>
+                            <button type="button" class="flip-button flip-button-back" onclick="location.href='dashboard.php'">
                                 <div class="inner">
                                     <div class="face front">ダッシュボードに戻る</div>
                                     <div class="face back"></div>
@@ -310,19 +309,18 @@ $_POST = $form;
                             </button>
                         <?php endif; ?>
 
-                        <!-- 通常ユーザーには TOP 戻る -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
-                            <a href="index.php">
-                                <button type="button" class="flip-button flip-button-home">
-                                    <div class="inner">
-                                        <div class="face front">TOPに戻る</div>
-                                        <div class="face back"></div>
-                                    </div>
-                                </button>
+                        <!-- 一般ユーザーのみ：TOPに戻る -->
+                        <?php if (!$isAdmin): ?>
+                            <a href="index.php" class="flip-button flip-button-home" style="text-decoration:none;">
+                                <div class="inner">
+                                    <div class="face front">TOPに戻る</div>
+                                    <div class="face back"></div>
+                                </div>
                             </a>
                         <?php endif; ?>
                     </div>
                 </form>
+
 
 
                 <!-- 編集フォームここまで -->

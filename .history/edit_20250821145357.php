@@ -1,13 +1,25 @@
 <?php
 
 /**
- * 更新・削除画面（edit.php）
- * - admin: ?id=xxx で任意ユーザを編集可能
- * - user : 自分の情報のみ編集
- * - 初回表示: DBの値をフォームにセット
- * - POST   : バリデーション通過で update.php へ
+ * 更新・削除画面
+ *
+ * ** 更新・削除画面は、ダッシュボード、更新・削除確認の2画面から遷移してきます
+ * * **
+ * ** 【説明】
+ * **   更新・削除では、入力チェックと画面遷移をjavascriptで行います
+ * **   そのため、登録の時とは違い、セッションを使用しないパターンのプログラムになります
+ * **
+ * ** 各画面毎の処理は以下です
+ * ** 1.DB接続情報、クラス定義をそれぞれのファイルから読み込む
+ * ** 2.DBからユーザ情報を取得する為、$_GETからID情報を取得する
+ * ** 3.ユーザ情報を取得する
+ * **   1.Userクラスをインスタスタンス化する
+ * **     ＊User(設計図)に$user(実体)を付ける
+ * **   2.メソッドを実行じユーザー情報を取得する
+ * ** 4.html を描画
  */
 
+//  1.DB接続情報、クラス定義の読み込み
 require_once 'Db.php';
 require_once 'User.php';
 require_once 'Validator.php';
@@ -15,79 +27,50 @@ require_once 'Validator.php';
 session_cache_limiter('none');
 session_start();
 
-// --- 認可ガード（ログイン必須） ---
-if (empty($_SESSION['role'])) {
-    header('Location: login.php');
-    exit;
-}
+// ← マイページなので GETのidは使わない
 
-$isAdmin = (($_SESSION['role'] ?? '') === 'admin');
 
-$pdo  = $pdo ?? Db::getConnection(); // Db.php の実装に合わせて適宜
 $user = new User($pdo);
-
 $error_message = [];
 
-// --- 1) 編集対象IDの決定 ---
-if ($isAdmin && isset($_GET['id'])) {
-    // 管理者は ?id= で任意ユーザ
-    $targetId = (int)$_GET['id'];
+if ($_SESSION['role'] === 'admin' && isset($_GET['id'])) {
+    // 管理者が他人を編集
+    $id = (int)$_GET['id'];
 } else {
-    // 一般ユーザーは自分自身のみ
-    $targetId = $_SESSION['user_id'] ?? null;
-    if (!$targetId) {
-        header('Location: login.php');
+    // 一般ユーザーは自分だけ
+    $id = $_SESSION['user_id'] ?? null;
+    if (!$id) {
+        header("Location: login.php");
         exit;
     }
 }
 
+$userData = $user->findById($id);
+$_POST = $userData;
 
 
-// --- 2) 対象ユーザー取得 ---
-$userData = $user->findById($targetId);
-if (!$userData) {
-    http_response_code(404);
-    exit('該当ユーザーが見つかりません。');
-}
-
-// --- 3) フォーム値の用意 ---
-// 初期表示はDB値、POSTが来たらPOSTを優先して画面に戻す
-$form = $userData;
-
-// --- 4) POST時の処理（検証→OKなら update.php へ） ---
+// POSTが来たらバリデーション → OKなら更新確認や更新処理へ
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 画面からの入力で上書き（未入力は既存値を維持）
-    $form = array_merge($userData, $_POST);
-
-    // Validator 互換のため birth_date を分解
+    // birth_date を年/月/日に分解（Validator互換）
     if (
-        !empty($form['birth_date']) &&
-        preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $form['birth_date'], $m)
+        !empty($_POST['birth_date']) &&
+        preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $_POST['birth_date'], $m)
     ) {
-        $form['birth_year']  = $m[1];
-        $form['birth_month'] = $m[2];
-        $form['birth_day']   = $m[3];
+        $_POST['birth_year']  = $m[1];
+        $_POST['birth_month'] = $m[2];
+        $_POST['birth_day']   = $m[3];
     }
 
-    // id を必ず持たせる
-    $form['id'] = $targetId;
-
     $validator = new Validator($pdo);
-    if ($validator->validate($form)) {
-        // 更新確認/本更新へ渡す
-        $_SESSION['edit_data'] = $form;
+    if ($validator->validate($_POST)) {
+        $_SESSION['edit_data'] = $_POST;
         header('Location: update.php');
         exit;
     } else {
         $error_message = $validator->getErrors();
-        if (!isset($form['gender'])) {
-            $form['gender'] = '1';
-        }
+        if (!isset($_POST['gender'])) $_POST['gender'] = '1';
     }
 }
-
-// --- 5) 既存のHTMLが $_POST[...] を参照しているため合わせる ---
-$_POST = $form;
 
 // 4.html の描画
 ?>
@@ -297,8 +280,9 @@ $_POST = $form;
                                 <div class="face back"></div>
                             </div>
                         </button>
-                        <!-- マスタだけに表示 -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+
+                        <!-- 戻るボタン：フォーム送信ではなく画面遷移 -->
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
                             <button
                                 type="button"
                                 class="flip-button flip-button-back"
@@ -310,17 +294,14 @@ $_POST = $form;
                             </button>
                         <?php endif; ?>
 
-                        <!-- 通常ユーザーには TOP 戻る -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
-                            <a href="index.php">
-                                <button type="button" class="flip-button flip-button-home">
-                                    <div class="inner">
-                                        <div class="face front">TOPに戻る</div>
-                                        <div class="face back"></div>
-                                    </div>
-                                </button>
-                            </a>
-                        <?php endif; ?>
+                        <a href="index.php">
+                            <button type="button" class="flip-button flip-button-home">
+                                <div class="inner">
+                                    <div class="face front">TOPに戻る</div>
+                                    <div class="face back"></div>
+                                </div>
+                            </button>
+                        </a>
                     </div>
                 </form>
 

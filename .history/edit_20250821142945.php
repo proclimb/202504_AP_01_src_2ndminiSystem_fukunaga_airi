@@ -21,27 +21,24 @@ if (empty($_SESSION['role'])) {
     exit;
 }
 
-$isAdmin = (($_SESSION['role'] ?? '') === 'admin');
-
 $pdo  = $pdo ?? Db::getConnection(); // Db.php の実装に合わせて適宜
 $user = new User($pdo);
 
 $error_message = [];
 
 // --- 1) 編集対象IDの決定 ---
-if ($isAdmin && isset($_GET['id'])) {
+if (($_SESSION['role'] ?? '') === 'admin' && isset($_GET['id'])) {
     // 管理者は ?id= で任意ユーザ
     $targetId = (int)$_GET['id'];
 } else {
     // 一般ユーザーは自分自身のみ
     $targetId = $_SESSION['user_id'] ?? null;
+
     if (!$targetId) {
         header('Location: login.php');
         exit;
     }
 }
-
-
 
 // --- 2) 対象ユーザー取得 ---
 $userData = $user->findById($targetId);
@@ -297,8 +294,9 @@ $_POST = $form;
                                 <div class="face back"></div>
                             </div>
                         </button>
-                        <!-- マスタだけに表示 -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+
+                        <!-- 戻るボタン：フォーム送信ではなく画面遷移 -->
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
                             <button
                                 type="button"
                                 class="flip-button flip-button-back"
@@ -309,9 +307,7 @@ $_POST = $form;
                                 </div>
                             </button>
                         <?php endif; ?>
-
-                        <!-- 通常ユーザーには TOP 戻る -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
+                        <?php if (!): ?>
                             <a href="index.php">
                                 <button type="button" class="flip-button flip-button-home">
                                     <div class="inner">

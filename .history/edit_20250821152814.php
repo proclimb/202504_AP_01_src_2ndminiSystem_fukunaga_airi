@@ -297,7 +297,8 @@ $_POST = $form;
                                 <div class="face back"></div>
                             </div>
                         </button>
-                        <!-- マスタだけに表示 -->
+
+                        <!-- 戻るボタン：フォーム送信ではなく画面遷移 -->
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                             <button
                                 type="button"
@@ -310,8 +311,7 @@ $_POST = $form;
                             </button>
                         <?php endif; ?>
 
-                        <!-- 通常ユーザーには TOP 戻る -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
+                        <?php if (!$isAdmin): ?>
                             <a href="index.php">
                                 <button type="button" class="flip-button flip-button-home">
                                     <div class="inner">

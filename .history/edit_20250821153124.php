@@ -298,7 +298,7 @@ $_POST = $form;
                             </div>
                         </button>
                         <!-- マスタだけに表示 -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'master'): ?>
                             <button
                                 type="button"
                                 class="flip-button flip-button-back"

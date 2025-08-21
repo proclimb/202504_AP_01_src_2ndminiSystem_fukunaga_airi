@@ -21,27 +21,24 @@ if (empty($_SESSION['role'])) {
     exit;
 }
 
-$isAdmin = (($_SESSION['role'] ?? '') === 'admin');
-
 $pdo  = $pdo ?? Db::getConnection(); // Db.php の実装に合わせて適宜
 $user = new User($pdo);
 
 $error_message = [];
 
 // --- 1) 編集対象IDの決定 ---
-if ($isAdmin && isset($_GET['id'])) {
+if (($_SESSION['role'] ?? '') === 'admin' && isset($_GET['id'])) {
     // 管理者は ?id= で任意ユーザ
     $targetId = (int)$_GET['id'];
 } else {
     // 一般ユーザーは自分自身のみ
     $targetId = $_SESSION['user_id'] ?? null;
+
     if (!$targetId) {
         header('Location: login.php');
         exit;
     }
 }
-
-
 
 // --- 2) 対象ユーザー取得 ---
 $userData = $user->findById($targetId);
@@ -79,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: update.php');
         exit;
     } else {
-        $error_message = $validator->getErrors();
+        $error_message2 = $validator->getErrors();
         if (!isset($form['gender'])) {
             $form['gender'] = '1';
         }
@@ -125,9 +122,9 @@ $_POST = $form;
                         name="name"
                         placeholder="例）山田太郎"
                         value="<?= htmlspecialchars($_POST['name']) ?>">
-                    <?php if (isset($error_message['name'])) : ?>
+                    <?php if (isset($error_message2['name'])) : ?>
                         <div class="error-msg">
-                            <?= htmlspecialchars($error_message['name']) ?></div>
+                            <?= htmlspecialchars($error_message2['name']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -137,9 +134,9 @@ $_POST = $form;
                         name="kana"
                         placeholder="例）やまだたろう"
                         value="<?= htmlspecialchars($_POST['kana']) ?>">
-                    <?php if (isset($error_message['kana'])) : ?>
+                    <?php if (isset($error_message2['kana'])) : ?>
                         <div class="error-msg">
-                            <?= htmlspecialchars($error_message['kana']) ?></div>
+                            <?= htmlspecialchars($error_message2['kana']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -192,9 +189,9 @@ $_POST = $form;
                             class="postal-code-search"
                             id="searchAddressBtn">住所検索</button>
                     </div>
-                    <?php if (isset($error_message['postal_code'])) : ?>
+                    <?php if (isset($error_message2['postal_code'])) : ?>
                         <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['postal_code']) ?></div>
+                            <?= htmlspecialchars($error_message2['postal_code']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -216,9 +213,9 @@ $_POST = $form;
                         name="building"
                         placeholder="建物名・部屋番号  **省略可**"
                         value="<?= htmlspecialchars($_POST['building'] ?? '') ?>">
-                    <?php if (isset($error_message['address'])) : ?>
+                    <?php if (isset($error_message2['address'])) : ?>
                         <div class="error-msg">
-                            <?= htmlspecialchars($error_message['address']) ?></div>
+                            <?= htmlspecialchars($error_message2['address']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -228,9 +225,9 @@ $_POST = $form;
                         name="tel"
                         placeholder="例）000-000-0000"
                         value="<?= htmlspecialchars($_POST['tel']) ?>">
-                    <?php if (isset($error_message['tel'])) : ?>
+                    <?php if (isset($error_message2['tel'])) : ?>
                         <div class="error-msg">
-                            <?= htmlspecialchars($error_message['tel']) ?></div>
+                            <?= htmlspecialchars($error_message2['tel']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -241,9 +238,9 @@ $_POST = $form;
                         placeholder="例）guest@example.com"
                         value="<?= htmlspecialchars($_POST['email']) ?>">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($_POST['id'] ?? '') ?>">
-                    <?php if (isset($error_message['email'])) : ?>
+                    <?php if (isset($error_message2['email'])) : ?>
                         <div class="error-msg">
-                            <?= htmlspecialchars($error_message['email']) ?></div>
+                            <?= htmlspecialchars($error_message2['email']) ?></div>
                     <?php endif ?>
                 </div>
                 <div>
@@ -297,8 +294,9 @@ $_POST = $form;
                                 <div class="face back"></div>
                             </div>
                         </button>
-                        <!-- マスタだけに表示 -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+
+                        <!-- 戻るボタン：フォーム送信ではなく画面遷移 -->
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
                             <button
                                 type="button"
                                 class="flip-button flip-button-back"
@@ -309,9 +307,7 @@ $_POST = $form;
                                 </div>
                             </button>
                         <?php endif; ?>
-
-                        <!-- 通常ユーザーには TOP 戻る -->
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
+                        <?php if ($userk): ?>
                             <a href="index.php">
                                 <button type="button" class="flip-button flip-button-home">
                                     <div class="inner">
