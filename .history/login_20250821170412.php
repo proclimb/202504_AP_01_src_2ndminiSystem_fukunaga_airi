@@ -66,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>mini System</title>
     <link rel="stylesheet" href="style_new.css">
-    <link rel="stylesheet" href="form.css">
 </head>
 
 <body>
@@ -96,10 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         name="password"
                         id="password"
                         placeholder="ここにパスワードを打ち込んでください">
-                    <button
-                        type="button"
-                        id="togglePwText"
-                        class="togglePwText">表示</button>
+                    <label class="show-pw">
+                        <input type="checkbox" id="togglePwText"
+                            class="togglePwText">表示
+                    </label>
                 </div>
                 <?php if (!empty($_SESSION['error_message'])): ?>
                     <div class="error-msg"><?= htmlspecialchars($_SESSION['error_message']) ?></div>

@@ -338,24 +338,20 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                 </div>
 
                 <!-- ２行目も同じ構造に -->
-                <div class="form-block">
+                <div class="form-block password-row">
                     <label>パスワード確認用<span>必須</span></label>
-                    <div class="pw-wrapper">
-
-                        <input type="password" class="password-input" name="password2" placeholder="もう一度パスワードを入力してください">
-                        <button
-                            type="button"
-                            id="togglePw2Text"
-                            class="togglePwText">表示</button>
-                    </div>
-                    <?php if (isset($error_message['password2'])) : ?>
-                        <div class="error-msg2">
-                            <?= htmlspecialchars($error_message['password2']) ?>
-                        </div>
-                    <?php endif ?>
-
+                    <input type="password" class="password-input" name="password2" placeholder="もう一度パスワードを入力してください">
+                    <button
+                        type="button"
+                        id="togglePw2Text"
+                        class="togglePwText">表示</button>
                 </div>
+                <?php if (isset($error_message['password2'])) : ?>
+                    <div class="error-msg2"><?= htmlspecialchars($error_message['password2']) ?></div>
+                <?php endif ?>
+
             </div>
+
             <!-- ↑ ここまでが “白パネル内” -->
 
     </div>

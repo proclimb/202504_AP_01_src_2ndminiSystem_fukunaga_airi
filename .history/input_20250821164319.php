@@ -339,9 +339,8 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
 
                 <!-- ２行目も同じ構造に -->
                 <div class="form-block">
-                    <label>パスワード確認用<span>必須</span></label>
                     <div class="pw-wrapper">
-
+                        <label>パスワード確認用<span>必須</span></label>
                         <input type="password" class="password-input" name="password2" placeholder="もう一度パスワードを入力してください">
                         <button
                             type="button"
@@ -355,28 +354,28 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                     <?php endif ?>
 
                 </div>
-            </div>
-            <!-- ↑ ここまでが “白パネル内” -->
 
-    </div>
-    <!-- ★ パネル外に出したボタン群 ★ -->
-    <div class="btn-group outside-panel">
-        <button type="submit" form="edit-form" class="flip-button">
-            <div class="inner">
-                <div class="face front">確認画面へ</div>
-                <div class="face back"></div>
-            </div>
-        </button>
+                <!-- ↑ ここまでが “白パネル内” -->
 
-        <a href="index.php">
-            <button type="button" class="flip-button flip-button-home">
-                <div class="inner">
-                    <div class="face front">TOPに戻る</div>
-                    <div class="face back"></div>
-                </div>
-            </button>
-        </a>
-    </div>
+            </div>
+            <!-- ★ パネル外に出したボタン群 ★ -->
+            <div class="btn-group outside-panel">
+                <button type="submit" form="edit-form" class="flip-button">
+                    <div class="inner">
+                        <div class="face front">確認画面へ</div>
+                        <div class="face back"></div>
+                    </div>
+                </button>
+
+                <a href="index.php">
+                    <button type="button" class="flip-button flip-button-home">
+                        <div class="inner">
+                            <div class="face front">TOPに戻る</div>
+                            <div class="face back"></div>
+                        </div>
+                    </button>
+                </a>
+            </div>
     </div>
     </form>
     <script src="pass.js" defer></script>

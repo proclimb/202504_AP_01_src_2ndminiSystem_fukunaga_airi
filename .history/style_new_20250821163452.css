@@ -1831,7 +1831,14 @@ button.flip-button.flip-button-register {
     max-width: 400px !important;
 }
 
-
+.pw-wrapper+.error-msg {
+    display: block !important;
+    clear: both !important;
+    width: 100% !important;
+    margin: 6px 0 0 150px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}
 
 /* ─── 入力＋ボタン行だけ横並び ─── */
 .form-block>div:not(.error-msg) {

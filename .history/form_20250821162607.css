@@ -13,7 +13,13 @@
     flex-shrink: 0;
 }
 
-
+.pw-wrapper+.error-msg {
+    display: block;
+    margin: 6px 0 0 0;
+    color: red;
+    white-space: normal;
+    word-break: normal;
+}
 
 /* ———————— 本体 ———————— */
 form {
@@ -55,7 +61,17 @@ form h1 {
     border-radius: 4px;
 }
 
-
+/* ——— エラーメッセージ ——— */
+.form-block>div+.error-msg,
+.form-block>div+.error-msg2 {
+    color: red;
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 6px;
+    white-space: normal;
+    word-break: break-word;
+}
 
 /* ——— ラベルやスパン装飾 ——— */
 form label {
@@ -216,7 +232,17 @@ label span {
 }
 
 /* 2. エラーメッセージは pw-wrapper の直後だけを狙う */
-
+.pw-wrapper+.error-msg {
+    display: block;
+    /* ブロック表示 */
+    margin-top: 6px;
+    /* 上との間隔 */
+    color: red;
+    /* お好みで */
+    /* 横並びのまま幅いっぱいに */
+    white-space: normal;
+    word-break: break-word;
+}
 
 /* 3. 他のフォームブロックは影響なし！ */
 /* パスワード行だけを横並びに */
@@ -239,8 +265,12 @@ label span {
     flex-shrink: 0;
 }
 
-
-
+/* エラー文は必ず pw-wrapper の下に */
+.pw-wrapper+.error-msg {
+    display: block;
+    margin-top: 6px;
+    color: red;
+}
 
 /* —— pw-wrapper だけを flex 化 —— */
 .pw-wrapper {
@@ -262,9 +292,49 @@ label span {
     flex-shrink: 0;
 }
 
+/* —— エラーメッセージは pw-wrapper の直後だけ下に —— */
+.pw-wrapper+.error-msg {
+    display: block;
+    margin: 6px 0 0;
+    width: 100%;
+    color: red;
+    /* お好みで */
+
+    /* 万一縦書きや回転が残っていたらリセット */
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    transform: none !important;
+
+    white-space: normal;
+    word-break: break-word;
+}
 
 /* ───────────── “縦書き・縦並び” を完全リセット ───────────── */
+.form-block>.error-msg,
+.form-block>.error-msg2 {
+    /* 既存の inline-block／width／margin 等を打ち消す */
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 6px 0 0 0 !important;
+    clear: both !important;
+    float: none !important;
 
+    /* 縦書き設定・回転設定をリセット */
+    -webkit-writing-mode: horizontal-tb !important;
+    -ms-writing-mode: lr-tb !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+
+    /* 折り返しは普通に */
+    white-space: normal !important;
+    word-break: break-word !important;
+
+    /* 色だけ残す */
+    color: red !important;
+}
 
 /* ── 1. .form-block を “純粋な”ブロック要素に戻す ── */
 .form-block {
@@ -396,7 +466,7 @@ label span {
    入力欄の直後にあるエラー文を
    ラベル幅（150px）下から横一列に
 ──────────────────────────────── */
-.error-msg {
+.form-block>.error-msg {
     display: block;
     margin: 6px 0 0 150px;
     width: calc(100% - 150px);
@@ -405,54 +475,11 @@ label span {
     color: red;
 }
 
-.error-msg2 {
+.form-block>.error-msg2 {
     display: block;
     margin: 6px 0 0 150px;
     width: calc(100% - 150px);
     white-space: normal;
     word-break: normal;
     color: red;
-}
-
-.postal-row+.error-msg2 {
-    display: block;
-    /* 横並び回避（inlineのままだと横に来やすい） */
-    clear: both;
-    /* 親やlabelのfloat対策 */
-    flex-basis: 100%;
-    /* 親がflexでも1行占有 */
-    margin: 6px 0 0 150px;
-    /* ラベル幅と同じ左インデント */
-    width: calc(100% - 150px);
-    /* 右側いっぱいに */
-    white-space: normal;
-    word-break: normal;
-    color: red;
-}
-
-.form-block .pw-wrapper+.error-msg2 {
-    display: block;
-    margin: 6px 0 0 0 !important;
-    /* ラベル幅ぶんの左マージンを打ち消す */
-    width: 100% !important;
-    line-height: 1.4;
-    color: #e00;
-}
-
-form[name="login"] .password-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-/* パスワード欄のエラーメッセージを入力欄の“真下”に配置 */
-form[name="login"] .password-wrapper+.error-msg {
-    display: block;
-    /* ラベル幅に合わせて左を揃える（数値はあなたのレイアウトに合わせて） */
-    margin: 6px 0 0 150px;
-    /* ← ラベルが150pxならこれでぴったり */
-    width: calc(100% - 150px);
-    line-height: 1.4;
-    color: #e00;
 }

@@ -429,30 +429,3 @@ label span {
     word-break: normal;
     color: red;
 }
-
-.form-block .pw-wrapper+.error-msg2 {
-    display: block;
-    margin: 6px 0 0 0 !important;
-    /* ラベル幅ぶんの左マージンを打ち消す */
-    width: 100% !important;
-    line-height: 1.4;
-    color: #e00;
-}
-
-form[name="login"] .password-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-/* パスワード欄のエラーメッセージを入力欄の“真下”に配置 */
-form[name="login"] .password-wrapper+.error-msg {
-    display: block;
-    /* ラベル幅に合わせて左を揃える（数値はあなたのレイアウトに合わせて） */
-    margin: 6px 0 0 150px;
-    /* ← ラベルが150pxならこれでぴったり */
-    width: calc(100% - 150px);
-    line-height: 1.4;
-    color: #e00;
-}

@@ -738,7 +738,18 @@ textarea+div {
 }
 
 /* 8636 */
-
+.error-msg,
+.error-msg2 {
+    color: red;
+    float: none !important;
+    display: inline-block !important;
+    width: 100% !important;
+    max-width: 500px;
+    margin: 6px 0 0 166px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    clear: both !important;
+}
 
 /* birth-selects */
 .birth-selects {
@@ -1279,7 +1290,10 @@ input[type="submit"]:hover {
 }
 
 /* エラーメッセージは目立つ赤で */
-
+.error-msg,
+.error-msg2 {
+    color: rgb(255, 0, 0) !important;
+}
 
 /* テーブルやCSVプレビューなどもダークトーンに */
 .common-table,
@@ -1831,11 +1845,46 @@ button.flip-button.flip-button-register {
     max-width: 400px !important;
 }
 
-
+.pw-wrapper+.error-msg {
+    display: block !important;
+    clear: both !important;
+    width: 100% !important;
+    margin: 6px 0 0 150px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}
 
 /* ─── 入力＋ボタン行だけ横並び ─── */
 .form-block>div:not(.error-msg) {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.form-block .error-msg2,
+.form-block .error-msg {
+    display: block !important;
+    color: red !important;
+    font-size: 0.95em !important;
+    margin-top: 4px !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: left !important;
+    position: static !important;
+}
+
+/* パスワード確認用（2行目）も同様に */
+.form-block .password-input+.error-msg2,
+.form-block .password-input+.error-msg {
+    margin-top: 4px !important;
+    margin-left: 0 !important;
+}
+
+/* 住所欄の複数inputにも対応 */
+.form-block input+.error-msg2,
+.form-block input+.error-msg {
+    margin-top: 4px !important;
+    margin-left: 0 !important;
 }

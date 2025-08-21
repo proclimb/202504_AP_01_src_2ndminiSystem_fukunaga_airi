@@ -316,25 +316,14 @@ if (!empty($_POST) && empty($_SESSION['input_data'])) {
                 <div class="form-block">
                     <label>パスワード<span>必須</span></label>
 
-                    <!-- ── pw-wrapper の中には input と button だけ ── -->
                     <div class="pw-wrapper">
-                        <input
-                            type="password"
-                            class="password-input"
-                            name="password"
-                            placeholder="ここにパスワードを打ち込んでください">
-                        <button
-                            type="button"
-                            id="togglePwText"
-                            class="togglePwText">表示</button>
+                        <input type="password" class="password-input" name="password" placeholder="ここにパスワードを打ち込んでください">
+                        <button type="button" id="togglePwText" class="togglePwText">表示</button>
                     </div>
-                    <div class="error-msg2">
-                        <!-- ── error-msg は pw-wrapper の“外”へ ── -->
-                        <?php if (isset($error_message['password'])) : ?>
 
-                            <?= htmlspecialchars($error_message['password']) ?>
-                    </div>
-                <?php endif ?>
+                    <?php if (isset($error_message['password'])): ?>
+                        <div class="error-msg2"><?= htmlspecialchars($error_message['password']) ?></div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- ２行目も同じ構造に -->
